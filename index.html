@@ -163,6 +163,7 @@
       display: flex;
       gap: 10px;
       align-items: center;
+      flex-wrap: wrap;
     }
 
     .btn-secundario {
@@ -179,6 +180,21 @@
       gap: 6px;
     }
     .btn-secundario:hover { background-color: #334155; }
+
+    .btn-whatsapp {
+      background-color: #25d366;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-whatsapp:hover { background-color: #1eb954; }
     
     .cabecalho-resultado {
       display: flex;
@@ -186,6 +202,8 @@
       align-items: center;
       margin-top: 28px;
       margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
     
     .total-painel {
@@ -194,6 +212,12 @@
       font-size: 1.15rem;
       font-weight: 700;
       color: #0f172a;
+    }
+
+    .rodape-whatsapp {
+      margin-top: 24px;
+      display: flex;
+      justify-content: flex-end;
     }
 
     /* REGRAS PARA IMPRESSÃO / SALVAR EM PDF */
@@ -210,7 +234,8 @@
       .status-conexao,
       .campo-secao,
       #secaoEdicao,
-      .grupo-acoes-final {
+      .grupo-acoes-final,
+      .rodape-whatsapp {
         display: none !important;
       }
       #secaoResultadoFinal {
@@ -309,6 +334,13 @@
           <tbody id="corpoTabelaFinal"></tbody>
         </table>
         <div class="total-painel" id="resumoValores"></div>
+
+        <!-- Botão WhatsApp no final do relatório -->
+        <div class="rodape-whatsapp">
+          <button class="btn-whatsapp" onclick="enviarWhatsApp()">
+            💬 Enviar Relatório via WhatsApp
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -550,12 +582,10 @@
       document.getElementById('secaoResultadoFinal').scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Exportação para planilha CSV (formato compatível com Excel em português)
     function exportarExcel() {
       const linhas = document.querySelectorAll('#corpoTabelaFinal tr');
       if (linhas.length === 0) return alert('Gere o relatório antes de exportar.');
 
-      // Cabeçalho da planilha delimitado por ponto e vírgula
       let csvConteudo = 'Criança;Dias no Mês;Sessões;Valor por Sessão (R$);Total (R$)\r\n';
 
       linhas.forEach(tr => {
@@ -571,11 +601,9 @@
         }
       });
 
-      // Linha do Total Geral
       const textoResumo = document.getElementById('resumoValores').innerText;
       csvConteudo += `\r\n"Total Geral";;;"${textoResumo}";""\r\n`;
 
-      // BOM (\uFEFF) para forçar o Excel a reconhecer caracteres acentuados em UTF-8
       const blob = new Blob(['\uFEFF' + csvConteudo], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       
@@ -586,6 +614,34 @@
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+    }
+
+    // Enviar relatório formatado diretamente via WhatsApp
+    function enviarWhatsApp() {
+      const linhas = document.querySelectorAll('#corpoTabelaFinal tr');
+      if (linhas.length === 0) return alert('Gere o relatório antes de compartilhar via WhatsApp.');
+
+      const titulo = document.getElementById('tituloFinal').innerText;
+      const resumo = document.getElementById('resumoValores').innerText;
+
+      let mensagem = `*${titulo}*\n*Espaço EDM*\n\n`;
+
+      linhas.forEach(tr => {
+        const cols = tr.querySelectorAll('td');
+        if (cols.length >= 5) {
+          const nome = cols[0].innerText.trim();
+          const dias = cols[1].innerText.trim();
+          const sessoes = cols[2].innerText.trim();
+          const total = cols[4].innerText.trim();
+
+          mensagem += `• *${nome}*: ${sessoes} aulas (Dias: ${dias}) - Total: ${total}\n`;
+        }
+      });
+
+      mensagem += `\n📊 *${resumo}*`;
+
+      const urlWhatsApp = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
+      window.open(urlWhatsApp, '_blank');
     }
   </script>
 </body>
