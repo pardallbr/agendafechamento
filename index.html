@@ -158,6 +158,35 @@
       margin-top: 18px;
     }
     .btn-gerar-relatorio:hover { background-color: #15803d; }
+
+    .grupo-acoes-final {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn-secundario {
+      background-color: #475569;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-secundario:hover { background-color: #334155; }
+    
+    .cabecalho-resultado {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 28px;
+      margin-bottom: 14px;
+    }
     
     .total-painel {
       margin-top: 18px;
@@ -165,6 +194,44 @@
       font-size: 1.15rem;
       font-weight: 700;
       color: #0f172a;
+    }
+
+    /* REGRAS PARA IMPRESSÃO / SALVAR EM PDF */
+    @media print {
+      body {
+        background-color: #ffffff;
+        padding: 0;
+      }
+      .card {
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+      }
+      .status-conexao,
+      .campo-secao,
+      #secaoEdicao,
+      .grupo-acoes-final {
+        display: none !important;
+      }
+      #secaoResultadoFinal {
+        display: block !important;
+      }
+      table {
+        page-break-inside: auto;
+      }
+      tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+      }
+      th {
+        background-color: #273e5a !important;
+        color: #ffffff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .col-dias {
+        color: #000000 !important;
+      }
     }
   </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -217,7 +284,18 @@
 
       <!-- Etapa 3: Relatório Consolidado -->
       <div id="secaoResultadoFinal" style="display: none;">
-        <h2 id="tituloFinal">Relatório de Sessões</h2>
+        <div class="cabecalho-resultado">
+          <h2 id="tituloFinal" style="margin: 0;">Relatório de Sessões</h2>
+          <div class="grupo-acoes-final">
+            <button class="btn-secundario" onclick="exportarExcel()">
+              📊 Baixar Planilha (Excel)
+            </button>
+            <button class="btn-secundario" onclick="window.print()">
+              🖨️ Imprimir / PDF
+            </button>
+          </div>
+        </div>
+
         <table>
           <thead>
             <tr>
@@ -333,14 +411,11 @@
       localStorage.setItem(KEY_STORAGE_VALORES, JSON.stringify(salvos));
     }
 
-    // Filtro para ignorar pontos, pagamentos e lembretes financeiros
     function deveIgnorarEvento(nome) {
       const limpo = nome.trim().toLowerCase();
       
-      // Ignora nomes que são apenas pontos ou símbolos sem letras/números
       if (/^[.\s\-–—_]+$/.test(limpo)) return true;
 
-      // Ignora contas, pagamentos e aniversários
       if (limpo.includes('pagar conta') || 
           limpo.includes('pagamento') || 
           limpo.includes('pagar') || 
@@ -473,6 +548,44 @@
 
       document.getElementById('secaoResultadoFinal').style.display = 'block';
       document.getElementById('secaoResultadoFinal').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Exportação para planilha CSV (formato compatível com Excel em português)
+    function exportarExcel() {
+      const linhas = document.querySelectorAll('#corpoTabelaFinal tr');
+      if (linhas.length === 0) return alert('Gere o relatório antes de exportar.');
+
+      // Cabeçalho da planilha delimitado por ponto e vírgula
+      let csvConteudo = 'Criança;Dias no Mês;Sessões;Valor por Sessão (R$);Total (R$)\r\n';
+
+      linhas.forEach(tr => {
+        const cols = tr.querySelectorAll('td');
+        if (cols.length >= 5) {
+          const nome = `"${cols[0].innerText.trim()}"`;
+          const dias = `"${cols[1].innerText.trim()}"`;
+          const sessoes = cols[2].innerText.trim();
+          const valorSessao = `"${cols[3].innerText.trim().replace('R$', '').trim()}"`;
+          const totalLinha = `"${cols[4].innerText.trim().replace('R$', '').trim()}"`;
+
+          csvConteudo += `${nome};${dias};${sessoes};${valorSessao};${totalLinha}\r\n`;
+        }
+      });
+
+      // Linha do Total Geral
+      const textoResumo = document.getElementById('resumoValores').innerText;
+      csvConteudo += `\r\n"Total Geral";;;"${textoResumo}";""\r\n`;
+
+      // BOM (\uFEFF) para forçar o Excel a reconhecer caracteres acentuados em UTF-8
+      const blob = new Blob(['\uFEFF' + csvConteudo], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      
+      const link = document.createElement('a');
+      const dataAte = document.getElementById('inputDataAte').value || 'fechamento';
+      link.setAttribute('href', url);
+      link.setAttribute('download', `relatorio_sessoes_${dataAte}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   </script>
 </body>
