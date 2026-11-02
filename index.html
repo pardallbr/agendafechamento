@@ -2,202 +2,328 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Relatório Mensal de Aulas - Espaço EDM</title>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 720px; margin: 30px auto; padding: 0 20px; color: #333; }
-    h1 { color: #1a365d; font-size: 1.5rem; margin-bottom: 20px; }
-    .card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
-    .form-group { margin-bottom: 15px; }
-    label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 0.9rem; }
-    input, select, button { padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; }
-    input[type="month"], input[type="number"], select { width: 100%; box-sizing: border-box; }
-    button { background: #2563eb; color: #fff; border: none; cursor: pointer; font-weight: 600; width: 100%; padding: 10px; margin-top: 10px; }
-    button:hover { background: #1d4ed8; }
-    button:disabled { background: #94a3b8; cursor: not-allowed; }
-    .agenda-list { max-height: 140px; overflow-y: auto; background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px; }
-    .agenda-item { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 0.9rem; }
-    .agenda-item input { width: auto; }
-    .results { margin-top: 20px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; }
-    .kpi-row { display: flex; gap: 15px; margin-bottom: 15px; }
-    .kpi { flex: 1; background: #f1f5f9; padding: 12px; border-radius: 6px; text-align: center; }
-    .kpi-val { font-size: 1.4rem; font-weight: bold; color: #0f172a; }
-    .kpi-lbl { font-size: 0.8rem; color: #64748b; text-transform: uppercase; margin-top: 4px; }
-    .dias-box { background: #f8fafc; border: 1px dashed #cbd5e1; padding: 12px; border-radius: 6px; font-size: 0.95rem; }
-    .tag-dia { display: inline-block; background: #e0e7ff; color: #3730a3; padding: 2px 8px; border-radius: 4px; margin: 2px; font-weight: 600; font-size: 0.85rem; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f1f5f9;
+      color: #1e293b;
+      display: flex;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+    .container {
+      background: #ffffff;
+      width: 100%;
+      max-width: 580px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      padding: 28px;
+    }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .btn-auth {
+      width: 100%;
+      background-color: #0284c7;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-auth:hover { background-color: #0369a1; }
+    .campo { margin-bottom: 18px; }
+    label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+      color: #334155;
+    }
+    input[type="month"], input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      background-color: #f8fafc;
+    }
+    .lista-agendas {
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 10px;
+      max-height: 150px;
+      overflow-y: auto;
+      background-color: #f8fafc;
+    }
+    .item-agenda {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+    .item-agenda input { cursor: pointer; }
+    .btn-gerar {
+      width: 100%;
+      background-color: #16a34a;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .btn-gerar:hover { background-color: #15803d; }
+    .btn-gerar:disabled { background-color: #94a3b8; cursor: not-allowed; }
+    .card-resultado {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 2px dashed #e2e8f0;
+    }
+    .resumo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .bloco-dado {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+    }
+    .bloco-dado .valor {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .bloco-dado .descricao {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    .bloco-dias {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 0.95rem;
+      color: #1e3a8a;
+    }
+    .bloco-dias strong { display: block; margin-bottom: 4px; }
   </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
-  <h1>Relatório Mensal de Aulas - Espaço EDM</h1>
+  <div class="container">
+    <h1>Relatório Mensal de Aulas - Espaço EDM</h1>
 
-  <div class="card">
-    <button id="btnAuth" onclick="handleAuth()">Conectar Google Agenda</button>
-  </div>
-
-  <div id="appBody" class="card" style="display: none;">
-    <div class="form-group">
-      <label>1. Escolha as agendas:</label>
-      <div id="calendarsList" class="agenda-list">Carregando agendas...</div>
+    <!-- Botão de login -->
+    <div id="secaoLogin">
+      <button class="btn-auth" onclick="iniciarConexao()">
+        Conectar Google Agenda
+      </button>
     </div>
 
-    <div class="form-group">
-      <label for="monthRef">2. Mês de referência:</label>
-      <input type="month" id="monthRef">
-    </div>
-
-    <div class="form-group">
-      <label for="valAula">3. Valor por aula (R$):</label>
-      <input type="number" id="valAula" value="0.00" step="0.50" min="0">
-    </div>
-
-    <button id="btnBuscar" onclick="calcularRelatorio()">Puxar Aulas e Calcular</button>
-  </div>
-
-  <div id="resultadoBox" class="results" style="display: none;">
-    <div class="kpi-row">
-      <div class="kpi">
-        <div class="kpi-val" id="totalAulas">0</div>
-        <div class="kpi-lbl">Total de Aulas</div>
+    <!-- Painel de filtros -->
+    <div id="painelConfig" style="display: none;">
+      <div class="campo">
+        <label>Escolha as agendas:</label>
+        <div id="boxAgendas" class="lista-agendas">Buscando suas agendas...</div>
       </div>
-      <div class="kpi">
-        <div class="kpi-val" id="totalValor">R$ 0,00</div>
-        <div class="kpi-lbl">Faturamento Total</div>
+
+      <div class="campo">
+        <label for="mesRef">1. Mês de referência:</label>
+        <input type="month" id="mesRef">
       </div>
+
+      <div class="campo">
+        <label for="valorAula">2. Valor por aula (R$):</label>
+        <input type="number" id="valorAula" value="0.00" step="0.50" min="0">
+      </div>
+
+      <button id="btnConsultar" class="btn-gerar" onclick="processarRelatorio()">Puxar Aulas e Calcular</button>
     </div>
 
-    <div class="dias-box">
-      <strong>Dias com aula:</strong>
-      <div id="diasList" style="margin-top: 8px;"></div>
+    <!-- Resultados -->
+    <div id="blocoResultado" class="card-resultado" style="display: none;">
+      <div class="resumo-grid">
+        <div class="bloco-dado">
+          <div class="valor" id="txtTotalAulas">0</div>
+          <div class="descricao">Total de Aulas</div>
+        </div>
+        <div class="bloco-dado">
+          <div class="valor" id="txtValorTotal">R$ 0,00</div>
+          <div class="descricao">Valor Total</div>
+        </div>
+      </div>
+
+      <div class="bloco-dias">
+        <strong>Dias do mês com aula:</strong>
+        <span id="txtDiasLista">-</span>
+      </div>
     </div>
   </div>
 
   <script>
-    // CONFIGURAÇÃO DO GOOGLE CONSOLE
-    // Cole aqui o ID do Cliente Web gerado no Google Cloud Console:
-    const CLIENT_ID = 'SEU_CLIENT_ID_AQUI.apps.googleusercontent.com';
-    const SCOPES = 'https://www.googleapis.com/auth/calendar.readonly';
+    // Client ID configurado diretamente do Google Cloud Console
+    const GOOGLE_CLIENT_ID = '846101014697-0nrq60gv7sgelmgtsincq3a0cds0osff.apps.googleusercontent.com';
 
     let tokenClient;
-    let accessToken = null;
+    let tokenAcesso = null;
 
     window.onload = () => {
-      // Inicializa o cliente OAuth2
-      tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: SCOPES,
-        callback: (resp) => {
-          if (resp.error) throw resp;
-          accessToken = resp.access_token;
-          document.getElementById('btnAuth').style.display = 'none';
-          document.getElementById('appBody').style.display = 'block';
-          carregarAgendas();
-        },
-      });
+      // Define mês atual por padrão
+      const hoje = new Date();
+      const anoAtual = hoje.getFullYear();
+      const mesAtual = String(hoje.getMonth() + 1).padStart(2, '0');
+      document.getElementById('mesRef').value = `${anoAtual}-${mesAtual}`;
 
-      // Padrão: mês atual no seletor
-      const now = new Date();
-      const ano = now.getFullYear();
-      const mes = String(now.getMonth() + 1).padStart(2, '0');
-      document.getElementById('monthRef').value = `${ano}-${mes}`;
+      // Prepara o cliente de login
+      tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: GOOGLE_CLIENT_ID,
+        scope: 'https://www.googleapis.com/auth/calendar.readonly',
+        callback: (resp) => {
+          if (resp.error) {
+            alert('Falha ao autenticar com o Google.');
+            return;
+          }
+          tokenAcesso = resp.access_token;
+          document.getElementById('secaoLogin').style.display = 'none';
+          document.getElementById('painelConfig').style.display = 'block';
+          listarCalendarios();
+        }
+      });
     };
 
-    function handleAuth() {
-      if (!CLIENT_ID || CLIENT_ID.includes('SEU_CLIENT_ID')) {
-        alert('Configure o CLIENT_ID no código antes de conectar!');
-        return;
-      }
+    function iniciarConexao() {
       tokenClient.requestAccessToken({ prompt: 'consent' });
     }
 
-    async function apiRequest(url) {
-      const resp = await fetch(url, {
-        headers: { Authorization: `Bearer ${accessToken}` }
+    async function consultaApi(endpoint) {
+      const resp = await fetch(endpoint, {
+        headers: { Authorization: `Bearer ${tokenAcesso}` }
       });
       return await resp.json();
     }
 
-    async function carregarAgendas() {
-      const container = document.getElementById('calendarsList');
+    async function listarCalendarios() {
+      const box = document.getElementById('boxAgendas');
       try {
-        const data = await apiRequest('https://www.googleapis.com/calendar/v3/users/me/calendarList');
-        container.innerHTML = '';
-        data.items.forEach(cal => {
+        const dados = await consultaApi('https://www.googleapis.com/calendar/v3/users/me/calendarList');
+        box.innerHTML = '';
+
+        if (!dados.items || dados.items.length === 0) {
+          box.innerHTML = 'Nenhuma agenda encontrada.';
+          return;
+        }
+
+        dados.items.forEach(cal => {
           const div = document.createElement('div');
-          div.className = 'agenda-item';
+          div.className = 'item-agenda';
           div.innerHTML = `
-            <input type="checkbox" id="${cal.id}" value="${cal.id}" checked>
-            <label for="${cal.id}" style="margin:0;font-weight:normal;cursor:pointer;">${cal.summary}</label>
+            <input type="checkbox" id="cal_${cal.id}" value="${cal.id}" checked>
+            <label for="cal_${cal.id}" style="margin:0; font-weight:normal; cursor:pointer;">${cal.summary}</label>
           `;
-          container.appendChild(div);
+          box.appendChild(div);
         });
       } catch (e) {
-        container.innerHTML = 'Erro ao carregar agendas.';
+        box.innerHTML = 'Erro ao carregar lista de agendas.';
       }
     }
 
-    async function calcularRelatorio() {
-      const monthVal = document.getElementById('monthRef').value;
-      if (!monthVal) return alert('Selecione um mês.');
+    async function processarRelatorio() {
+      const mesRefVal = document.getElementById('mesRef').value;
+      if (!mesRefVal) {
+        alert('Por favor, selecione o mês de referência.');
+        return;
+      }
 
-      const checkboxes = document.querySelectorAll('#calendarsList input[type="checkbox"]:checked');
-      if (checkboxes.length === 0) return alert('Selecione pelo menos uma agenda.');
+      const checks = document.querySelectorAll('#boxAgendas input[type="checkbox"]:checked');
+      if (checks.length === 0) {
+        alert('Selecione pelo menos uma agenda na lista.');
+        return;
+      }
 
-      const [ano, mes] = monthVal.split('-').map(Number);
-      const timeMin = new Date(ano, mes - 1, 1, 0, 0, 0).toISOString();
-      const timeMax = new Date(ano, mes, 0, 23, 59, 59).toISOString();
+      const btn = document.getElementById('btnConsultar');
+      btn.disabled = true;
+      btn.innerText = 'Calculando...';
 
-      let todosEventos = [];
-      document.getElementById('btnBuscar').disabled = true;
-      document.getElementById('btnBuscar').innerText = 'Buscando aulas...';
+      const [ano, mes] = mesRefVal.split('-').map(Number);
+      const dataInicio = new Date(ano, mes - 1, 1, 0, 0, 0).toISOString();
+      const dataFim = new Date(ano, mes, 0, 23, 59, 59).toISOString();
 
-      for (const cb of checkboxes) {
-        const calId = encodeURIComponent(cb.value);
-        const url = `https://www.googleapis.com/calendar/v3/calendars/${calId}/events?timeMin=${timeMin}&timeMax=${timeMax}&singleEvents=true&orderBy=startTime`;
-        const data = await apiRequest(url);
-        if (data.items) {
-          todosEventos = todosEventos.concat(data.items);
+      let listaEventos = [];
+
+      for (const chk of checks) {
+        const idCodificado = encodeURIComponent(chk.value);
+        const url = `https://www.googleapis.com/calendar/v3/calendars/${idCodificado}/events?timeMin=${dataInicio}&timeMax=${dataFim}&singleEvents=true&orderBy=startTime`;
+        const res = await consultaApi(url);
+        if (res.items) {
+          listaEventos = listaEventos.concat(res.items);
         }
       }
 
-      document.getElementById('btnBuscar').disabled = false;
-      document.getElementById('btnBuscar').innerText = 'Puxar Aulas e Calcular';
+      btn.disabled = false;
+      btn.innerText = 'Puxar Aulas e Calcular';
 
-      // Filtragem e extração de dias
-      const diasEncontrados = new Set();
-      let contagemAulas = 0;
+      // Filtragem dos eventos e extração das datas
+      const setDias = new Set();
+      let quantidadeAulas = 0;
 
-      todosEventos.forEach(ev => {
-        // Ignora eventos de dia inteiro ou cancelados se necessário
-        const startStr = ev.start?.dateTime || ev.start?.date;
-        if (!startStr) return;
+      listaEventos.forEach(ev => {
+        const inicio = ev.start?.dateTime || ev.start?.date;
+        if (!inicio) return;
 
-        const dataObj = new Date(startStr);
-        const diaFormatado = String(dataObj.getDate()).padStart(2, '0');
-        
-        diasEncontrados.add(diaFormatado);
-        contagemAulas++;
+        const dataEvento = new Date(inicio);
+        const diaComDoisDigitos = String(dataEvento.getDate()).padStart(2, '0');
+
+        setDias.add(diaComDoisDigitos);
+        quantidadeAulas++;
       });
 
-      // Ordenar os dias em ordem crescente (ex: 02, 04, 14, 17)
-      const diasOrdenados = Array.from(diasEncontrados).sort((a, b) => Number(a) - Number(b));
+      // Ordenar os dias numericamente: 02, 05, 14, 21...
+      const diasOrdenados = Array.from(setDias).sort((a, b) => Number(a) - Number(b));
 
-      // Valores
-      const valUnit = parseFloat(document.getElementById('valAula').value) || 0;
-      const faturamento = contagemAulas * valUnit;
+      // Cálculo financeiro
+      const precoAula = parseFloat(document.getElementById('valorAula').value) || 0;
+      const faturamentoTotal = quantidadeAulas * precoAula;
 
-      // Exibir no DOM
-      document.getElementById('totalAulas').innerText = contagemAulas;
-      document.getElementById('totalValor').innerText = faturamento.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      // Exibição na página
+      document.getElementById('txtTotalAulas').innerText = quantidadeAulas;
+      document.getElementById('txtValorTotal').innerText = faturamentoTotal.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      });
 
-      const diasContainer = document.getElementById('diasList');
+      const txtDias = document.getElementById('txtDiasLista');
       if (diasOrdenados.length > 0) {
-        diasContainer.innerHTML = diasOrdenados.map(d => `<span class="tag-dia">Dia ${d}</span>`).join(' ');
+        txtDias.innerText = diasOrdenados.join(', ');
       } else {
-        diasContainer.innerHTML = '<em>Nenhuma aula encontrada no período.</em>';
+        txtDias.innerText = 'Nenhuma aula encontrada para este mês.';
       }
 
-      document.getElementById('resultadoBox').style.display = 'block';
+      document.getElementById('blocoResultado').style.display = 'block';
     }
   </script>
 </body>
