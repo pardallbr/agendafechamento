@@ -8,174 +8,196 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: #ffffff;
+      background-color: #f8fafc;
       color: #1e293b;
-      padding: 30px 24px;
+      padding: 30px 16px;
     }
-    .wrapper {
+    .card {
+      background: #ffffff;
+      width: 100%;
       max-width: 900px;
       margin: 0 auto;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      padding: 32px 36px;
     }
     h1 {
-      font-size: 1.5rem;
+      font-size: 1.35rem;
       font-weight: 700;
-      color: #0f172a;
-      margin-bottom: 24px;
-    }
-    h2 {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #0f172a;
-      margin: 24px 0 14px 0;
-    }
-    .btn-auth {
-      background-color: #0284c7;
-      color: #ffffff;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 18px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .btn-auth:hover { background-color: #0369a1; }
-    .filtros-topo {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      color: #1e3a5f;
       margin-bottom: 20px;
     }
-    .campo-inline {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.95rem;
-      font-weight: 500;
+    h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin: 28px 0 14px 0;
     }
-    input[type="date"], input[type="month"] {
-      padding: 6px 10px;
-      border: 1px solid #cbd5e1;
+    
+    /* Faixa de conexão */
+    .status-conexao {
+      background-color: #e6f7f4;
+      border: 1px solid #b2e8de;
       border-radius: 6px;
-      font-size: 0.95rem;
+      padding: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 24px;
     }
-    .btn-acao {
-      align-self: flex-start;
+    .badge-conectado {
+      background-color: #94a3b8;
+      color: #ffffff;
+      padding: 8px 24px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: default;
+    }
+    .badge-conectado.ativo {
+      background-color: #64748b;
+    }
+    .btn-conectar {
       background-color: #0284c7;
       color: #ffffff;
       border: none;
       border-radius: 6px;
-      padding: 10px 18px;
+      padding: 10px 22px;
       font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
-      margin-top: 8px;
     }
-    .btn-acao:hover { background-color: #0369a1; }
-    .btn-gerar-final {
-      background-color: #16a34a;
+    .btn-conectar:hover { background-color: #0369a1; }
+
+    /* Campos de Data */
+    .campo-secao {
+      margin-bottom: 18px;
+    }
+    .label-principal {
+      display: block;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0f172a;
+      margin-bottom: 10px;
+    }
+    .linha-data {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      font-size: 0.95rem;
+    }
+    input[type="month"], input[type="date"] {
+      padding: 7px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      background: #ffffff;
+      color: #334155;
+    }
+    
+    .btn-buscar {
+      background-color: #0284c7;
       color: #ffffff;
       border: none;
-      border-radius: 6px;
-      padding: 10px 20px;
-      font-size: 1rem;
+      border-radius: 4px;
+      padding: 9px 18px;
+      font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
-      margin: 20px 0;
+      margin-top: 4px;
     }
-    .btn-gerar-final:hover { background-color: #15803d; }
-    
+    .btn-buscar:hover { background-color: #0369a1; }
+    .btn-buscar:disabled { background-color: #94a3b8; cursor: not-allowed; }
+
     /* Tabelas */
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 8px;
+      margin-top: 10px;
     }
     th {
-      background-color: #1e3a5f;
+      background-color: #273e5a;
       color: #ffffff;
       font-weight: 600;
       font-size: 0.9rem;
       text-align: left;
-      padding: 10px 12px;
-      border: 1px solid #1e3a5f;
+      padding: 10px 14px;
+      border: 1px solid #273e5a;
     }
     td {
-      padding: 8px 12px;
+      padding: 9px 14px;
       border: 1px solid #e2e8f0;
       font-size: 0.9rem;
       vertical-align: middle;
     }
     tr:nth-child(even) { background-color: #f8fafc; }
-    .col-check { width: 50px; text-align: center; }
+    .col-check { width: 45px; text-align: center; }
     .col-check input { width: 16px; height: 16px; cursor: pointer; }
-    .col-sessao { width: 70px; text-align: center; font-weight: 600; }
-    .col-valor { width: 130px; }
+    .col-sessao { width: 80px; text-align: center; font-weight: 600; }
+    .col-valor { width: 120px; }
+    .col-dias { color: #2563eb; font-weight: 500; }
+    
     .input-preco {
       width: 100%;
-      padding: 6px 8px;
+      padding: 6px 10px;
       border: 1px solid #cbd5e1;
       border-radius: 4px;
       font-size: 0.9rem;
     }
-    .tag-dias {
-      color: #2563eb;
-      font-size: 0.85rem;
-      font-weight: 500;
+    
+    .btn-gerar-relatorio {
+      background-color: #16a34a;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 18px;
     }
-    .total-geral {
-      margin-top: 15px;
+    .btn-gerar-relatorio:hover { background-color: #15803d; }
+    
+    .total-painel {
+      margin-top: 18px;
       text-align: right;
       font-size: 1.15rem;
       font-weight: 700;
       color: #0f172a;
-    }
-    .agenda-box {
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      padding: 10px;
-      max-height: 120px;
-      overflow-y: auto;
-      margin-bottom: 15px;
-      max-width: 450px;
-    }
-    .agenda-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 4px;
-      font-size: 0.85rem;
     }
   </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
-  <div class="wrapper">
-    <h1>Relatório de Aulas - Espaço EDM</h1>
+  <div class="card">
+    <h1>Relatório Mensal de Aulas - Espaço EDM</h1>
 
-    <!-- Autenticação -->
-    <div id="authSection" style="margin-bottom: 20px;">
-      <button class="btn-auth" onclick="autenticarGoogle()">Conectar Google Agenda</button>
+    <!-- Faixa de status e botão de conexão fixa -->
+    <div class="status-conexao">
+      <button id="btnConexao" class="btn-conectar" onclick="autenticar()">Conectar Google Agenda</button>
+      <div id="badgeConectado" class="badge-conectado ativo" style="display: none;">Conectado ✓</div>
     </div>
 
-    <!-- Etapa 1: Filtros de Período e Agendas -->
-    <div id="appControls" style="display: none;">
-      <div class="filtros-topo">
-        <div>
-          <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 4px;">Escolha as agendas:</label>
-          <div id="listaAgendas" class="agenda-box">Carregando agendas...</div>
+    <!-- Filtros de Referência -->
+    <div id="painelBusca" style="display: none;">
+      <div class="campo-secao">
+        <label class="label-principal" for="inputMes">1. Mês de referência</label>
+        <div style="margin-bottom: 12px;">
+          <input type="month" id="inputMes" onchange="atualizarLimiteMes()">
         </div>
 
-        <div class="campo-inline">
-          <label for="filtroDataAte">Contar sessões até o dia:</label>
-          <input type="date" id="filtroDataAte">
+        <div class="linha-data">
+          <span>Contar sessões até o dia:</span>
+          <input type="date" id="inputDataAte">
         </div>
 
-        <button class="btn-acao" id="btnBuscar" onclick="buscarSessoesDaAgenda()">Buscar crianças da agenda</button>
+        <button id="btnBuscarAulas" class="btn-buscar" onclick="buscarAulasPardal()">Buscar crianças da agenda</button>
       </div>
 
-      <!-- Etapa 2: Tabela de seleção de crianças e edição de valores -->
-      <div id="secaoConfiguracao" style="display: none;">
+      <!-- Etapa 2: Lista com seleção e valores salvos -->
+      <div id="secaoEdicao" style="display: none;">
         <h2>2. Desmarque o que não é criança e coloque o valor da sessão</h2>
         <table>
           <thead>
@@ -190,12 +212,12 @@
           <tbody id="corpoTabelaConfig"></tbody>
         </table>
 
-        <button class="btn-gerar-final" onclick="gerarRelatorioFinal()">Gerar Relatório Consolidado</button>
+        <button class="btn-gerar-relatorio" onclick="gerarTabelaFinal()">Gerar Relatório Consolidado</button>
       </div>
 
-      <!-- Etapa 3: Relatório Final -->
-      <div id="secaoRelatorioFinal" style="display: none;">
-        <h2 id="tituloRelatorioFinal">Relatório de Sessões</h2>
+      <!-- Etapa 3: Relatório Consolidado -->
+      <div id="secaoResultadoFinal" style="display: none;">
+        <h2 id="tituloFinal">Relatório de Sessões</h2>
         <table>
           <thead>
             <tr>
@@ -208,212 +230,242 @@
           </thead>
           <tbody id="corpoTabelaFinal"></tbody>
         </table>
-        <div class="total-geral" id="txtTotalGeral"></div>
+        <div class="total-painel" id="resumoValores"></div>
       </div>
     </div>
   </div>
 
   <script>
-    const GOOGLE_CLIENT_ID = '846101014697-0nrq60gv7sgelmgtslncq3a0cds0osff.apps.googleusercontent.com';
-    const CHAVE_STORAGE = 'edm_valores_criancas';
+    const CLIENT_ID = '846101014697-0nrq60gv7sgelmgtslncq3a0cds0osff.apps.googleusercontent.com';
+    const KEY_STORAGE_TOKEN = 'edm_google_token';
+    const KEY_STORAGE_VALORES = 'edm_precos_criancas';
 
     let tokenClient;
-    let tokenAcesso = null;
-    let mapaAlunos = {};
+    let accessToken = null;
+    let agendaPardalId = null;
+    let dadosCrianças = {};
 
     window.onload = () => {
-      // Define a data atual no filtro
+      // Preencher mês e data atual por padrão
       const hoje = new Date();
-      document.getElementById('filtroDataAte').value = hoje.toISOString().split('T')[0];
+      const ano = hoje.getFullYear();
+      const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+      document.getElementById('inputMes').value = `${ano}-${mes}`;
+      atualizarLimiteMes();
 
+      // Configuração do cliente OAuth2
       tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: GOOGLE_CLIENT_ID,
+        client_id: CLIENT_ID,
         scope: 'https://www.googleapis.com/auth/calendar.readonly',
         callback: (resp) => {
-          if (resp.error) return alert('Falha ao autenticar.');
-          tokenAcesso = resp.access_token;
-          document.getElementById('authSection').style.display = 'none';
-          document.getElementById('appControls').style.display = 'block';
-          carregarAgendas();
+          if (resp.error) return alert('Erro ao autenticar com o Google.');
+          definirToken(resp.access_token);
         }
       });
+
+      // Tentar restaurar login salvo anteriormente
+      const tokenSalvo = localStorage.getItem(KEY_STORAGE_TOKEN);
+      if (tokenSalvo) {
+        definirToken(tokenSalvo, false);
+      }
     };
 
-    function autenticarGoogle() {
-      tokenClient.requestAccessToken({ prompt: 'consent' });
-    }
-
-    async function apiRequest(url) {
-      const resp = await fetch(url, {
-        headers: { Authorization: `Bearer ${tokenAcesso}` }
-      });
-      return await resp.json();
-    }
-
-    // Carrega agendas da conta
-    async function carregarAgendas() {
-      const container = document.getElementById('listaAgendas');
-      try {
-        const data = await apiRequest('https://www.googleapis.com/calendar/v3/users/me/calendarList');
-        container.innerHTML = '';
-        if (!data.items || data.items.length === 0) {
-          container.innerHTML = 'Nenhuma agenda encontrada.';
-          return;
-        }
-        data.items.forEach(cal => {
-          const div = document.createElement('div');
-          div.className = 'agenda-item';
-          div.innerHTML = `
-            <input type="checkbox" id="cal_${cal.id}" value="${cal.id}" checked>
-            <label for="cal_${cal.id}" style="cursor:pointer;">${cal.summary}</label>
-          `;
-          container.appendChild(div);
-        });
-      } catch (e) {
-        container.innerHTML = 'Erro ao carregar agendas.';
+    function atualizarLimiteMes() {
+      const mesVal = document.getElementById('inputMes').value;
+      if (!mesVal) return;
+      const [ano, mes] = mesVal.split('-').map(Number);
+      
+      const hoje = new Date();
+      if (hoje.getFullYear() === ano && (hoje.getMonth() + 1) === mes) {
+        // Se for o mês corrente, limita até a data de hoje
+        const dia = String(hoje.getDate()).padStart(2, '0');
+        document.getElementById('inputDataAte').value = `${ano}-${String(mes).padStart(2, '0')}-${dia}`;
+      } else {
+        // Mês fechado: último dia do mês
+        const ultDia = new Date(ano, mes, 0).getDate();
+        document.getElementById('inputDataAte').value = `${ano}-${String(mes).padStart(2, '0')}-${String(ultDia).padStart(2, '0')}`;
       }
     }
 
-    // Memória Local de Valores
-    function obterValoresSalvos() {
+    function definirToken(token, persistir = true) {
+      accessToken = token;
+      if (persistir) {
+        localStorage.setItem(KEY_STORAGE_TOKEN, token);
+      }
+      document.getElementById('btnConexao').style.display = 'none';
+      document.getElementById('badgeConectado').style.display = 'block';
+      document.getElementById('painelBusca').style.display = 'block';
+      identificarAgendaPardal();
+    }
+
+    function autenticar() {
+      tokenClient.requestAccessToken({ prompt: '' });
+    }
+
+    async function fetchGoogle(url) {
+      const resp = await fetch(url, {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
+      if (resp.status === 401) {
+        // Token expirou: pede nova autorização limpa
+        localStorage.removeItem(KEY_STORAGE_TOKEN);
+        document.getElementById('btnConexao').style.display = 'block';
+        document.getElementById('badgeConectado').style.display = 'none';
+        tokenClient.requestAccessToken({ prompt: '' });
+        return null;
+      }
+      return await resp.json();
+    }
+
+    // Localiza e fixa unicamente a agenda "Pardal"
+    async function identificarAgendaPardal() {
+      const data = await fetchGoogle('https://www.googleapis.com/calendar/v3/users/me/calendarList');
+      if (!data || !data.items) return;
+
+      const encontrada = data.items.find(cal => cal.summary.toLowerCase().includes('pardal'));
+      if (encontrada) {
+        agendaPardalId = encontrada.id;
+      } else {
+        // Se não tiver o nome Pardal explícito, usa a agenda principal da conta
+        agendaPardalId = 'primary';
+      }
+    }
+
+    // Memória local de valores das crianças
+    function getPrecosSalvos() {
       try {
-        return JSON.parse(localStorage.getItem(CHAVE_STORAGE)) || {};
+        return JSON.parse(localStorage.getItem(KEY_STORAGE_VALORES)) || {};
       } catch (e) {
         return {};
       }
     }
 
-    function salvarValorNoStorage(nome, valor) {
-      const salvos = obterValoresSalvos();
+    function salvarPreco(nome, valor) {
+      const salvos = getPrecosSalvos();
       salvos[nome.trim()] = valor;
-      localStorage.setItem(CHAVE_STORAGE, JSON.stringify(salvos));
+      localStorage.setItem(KEY_STORAGE_VALORES, JSON.stringify(salvos));
     }
 
-    // Busca e agrupamento dos eventos por criança
-    async function buscarSessoesDaAgenda() {
-      const dataAteStr = document.getElementById('filtroDataAte').value;
+    async function buscarAulasPardal() {
+      if (!agendaPardalId) await identificarAgendaPardal();
+
+      const mesVal = document.getElementById('inputMes').value;
+      const dataAteStr = document.getElementById('inputDataAte').value;
       if (!dataAteStr) return alert('Selecione a data limite.');
 
-      const checkboxes = document.querySelectorAll('#listaAgendas input[type="checkbox"]:checked');
-      if (checkboxes.length === 0) return alert('Selecione pelo menos uma agenda.');
+      const [ano, mes] = mesVal.split('-').map(Number);
+      const diaFim = Number(dataAteStr.split('-')[2]);
 
-      const [ano, mes, dia] = dataAteStr.split('-').map(Number);
       const timeMin = new Date(ano, mes - 1, 1, 0, 0, 0).toISOString();
-      const timeMax = new Date(ano, mes - 1, dia, 23, 59, 59).toISOString();
+      const timeMax = new Date(ano, mes - 1, diaFim, 23, 59, 59).toISOString();
 
-      const btn = document.getElementById('btnBuscar');
+      const btn = document.getElementById('btnBuscarAulas');
       btn.disabled = true;
-      btn.innerText = 'Carregando agenda...';
+      btn.innerText = 'Buscando na agenda...';
 
-      let todosEventos = [];
-      for (const cb of checkboxes) {
-        const idCal = encodeURIComponent(cb.value);
-        const url = `https://www.googleapis.com/calendar/v3/calendars/${idCal}/events?timeMin=${timeMin}&timeMax=${timeMax}&singleEvents=true&orderBy=startTime`;
-        const res = await apiRequest(url);
-        if (res.items) todosEventos = todosEventos.concat(res.items);
-      }
+      const calId = encodeURIComponent(agendaPardalId);
+      const url = `https://www.googleapis.com/calendar/v3/calendars/${calId}/events?timeMin=${timeMin}&timeMax=${timeMax}&singleEvents=true&orderBy=startTime`;
+      const data = await fetchGoogle(url);
 
       btn.disabled = false;
       btn.innerText = 'Buscar crianças da agenda';
 
-      // Agrupar por nome do evento e coletar dias
-      mapaAlunos = {};
-      todosEventos.forEach(ev => {
+      if (!data || !data.items) return;
+
+      dadosCrianças = {};
+      data.items.forEach(ev => {
         const nome = (ev.summary || '').trim();
         if (!nome) return;
 
         const inicio = ev.start?.dateTime || ev.start?.date;
         if (!inicio) return;
 
-        const diaNum = String(new Date(inicio).getDate()).padStart(2, '0');
+        const dia = String(new Date(inicio).getDate()).padStart(2, '0');
 
-        if (!mapaAlunos[nome]) {
-          mapaAlunos[nome] = { sessoes: 0, dias: new Set() };
+        if (!dadosCrianças[nome]) {
+          dadosCrianças[nome] = { sessoes: 0, dias: new Set() };
         }
-        mapaAlunos[nome].sessoes += 1;
-        mapaAlunos[nome].dias.add(diaNum);
+        dadosCrianças[nome].sessoes += 1;
+        dadosCrianças[nome].dias.add(dia);
       });
 
-      renderizarTabelaConfiguracao();
+      renderizarEtapa2();
     }
 
-    function renderizarTabelaConfiguracao() {
+    function renderizarEtapa2() {
       const tbody = document.getElementById('corpoTabelaConfig');
       tbody.innerHTML = '';
 
-      const valoresSalvos = obterValoresSalvos();
-      const nomes = Object.keys(mapaAlunos).sort((a, b) => a.localeCompare(b));
+      const precos = getPrecosSalvos();
+      const nomes = Object.keys(dadosCrianças).sort((a, b) => a.localeCompare(b));
 
-      nomes.forEach((nome, idx) => {
-        const item = mapaAlunos[nome];
-        const diasFormatados = Array.from(item.dias).sort((a, b) => Number(a) - Number(b)).join(', ');
-        const valorSalvo = valoresSalvos[nome] !== undefined ? valoresSalvos[nome] : '';
-
-        // Filtro prévio: desmarca eventos que parecem compromissos/aniversários
-        const provavelCrianca = !nome.toLowerCase().includes('aniversário') && !nome.toLowerCase().includes('aniversario');
+      nomes.forEach((nome, i) => {
+        const item = dadosCrianças[nome];
+        const diasStr = Array.from(item.dias).sort((a, b) => Number(a) - Number(b)).join(', ');
+        const valorSalvo = precos[nome] !== undefined ? precos[nome] : '';
+        const ehCrianca = !nome.toLowerCase().includes('aniversário') && !nome.toLowerCase().includes('aniversario');
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td class="col-check">
-            <input type="checkbox" id="chk_${idx}" data-nome="${nome}" ${provavelCrianca ? 'checked' : ''}>
+            <input type="checkbox" id="chk_${i}" data-nome="${nome}" ${ehCrianca ? 'checked' : ''}>
           </td>
           <td><strong>${nome}</strong></td>
-          <td class="tag-dias">${diasFormatados}</td>
+          <td class="col-dias">${diasStr}</td>
           <td class="col-sessao">${item.sessoes}</td>
           <td class="col-valor">
-            <input type="number" class="input-preco" id="val_${idx}" data-nome="${nome}" value="${valorSalvo}" placeholder="0" step="5" onchange="salvarValorNoStorage('${nome}', this.value)">
+            <input type="number" class="input-preco" id="preco_${i}" data-nome="${nome}" value="${valorSalvo}" placeholder="0" step="5" onchange="salvarPreco('${nome}', this.value)">
           </td>
         `;
         tbody.appendChild(tr);
       });
 
-      document.getElementById('secaoConfiguracao').style.display = 'block';
-      document.getElementById('secaoRelatorioFinal').style.display = 'none';
+      document.getElementById('secaoEdicao').style.display = 'block';
+      document.getElementById('secaoResultadoFinal').style.display = 'none';
     }
 
-    function gerarRelatorioFinal() {
+    function gerarTabelaFinal() {
       const tbody = document.getElementById('corpoTabelaFinal');
       tbody.innerHTML = '';
 
-      const rows = document.querySelectorAll('#corpoTabelaConfig tr');
+      const linhas = document.querySelectorAll('#corpoTabelaConfig tr');
       let totalGeral = 0;
-      let totalAulasGeral = 0;
+      let totalSessoes = 0;
 
-      rows.forEach(tr => {
+      linhas.forEach(tr => {
         const chk = tr.querySelector('input[type="checkbox"]');
         if (!chk || !chk.checked) return;
 
         const nome = chk.getAttribute('data-nome');
-        const inputVal = tr.querySelector('.input-preco');
-        const valorUnitario = parseFloat(inputVal.value) || 0;
+        const precoInput = tr.querySelector('.input-preco');
+        const valorUnit = parseFloat(precoInput.value) || 0;
 
-        const item = mapaAlunos[nome];
-        const subtotal = item.sessoes * valorUnitario;
+        const info = dadosCrianças[nome];
+        const subtotal = info.sessoes * valorUnit;
         totalGeral += subtotal;
-        totalAulasGeral += item.sessoes;
+        totalSessoes += info.sessoes;
 
-        const diasFormatados = Array.from(item.dias).sort((a, b) => Number(a) - Number(b)).join(', ');
+        const diasStr = Array.from(info.dias).sort((a, b) => Number(a) - Number(b)).join(', ');
 
         const trFinal = document.createElement('tr');
         trFinal.innerHTML = `
           <td><strong>${nome}</strong></td>
-          <td class="tag-dias">${diasFormatados}</td>
-          <td class="col-sessao">${item.sessoes}</td>
-          <td>${valorUnitario.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+          <td class="col-dias">${diasStr}</td>
+          <td class="col-sessao">${info.sessoes}</td>
+          <td>${valorUnit.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
           <td><strong>${subtotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</strong></td>
         `;
         tbody.appendChild(trFinal);
       });
 
-      const dataAte = document.getElementById('filtroDataAte').value;
-      const partes = dataAte.split('-');
-      const dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
+      const dataAte = document.getElementById('inputDataAte').value;
+      const [ano, mes, dia] = dataAte.split('-');
       
-      document.getElementById('tituloRelatorioFinal').innerText = `Relatório de Sessões (até ${dataFormatada})`;
-      document.getElementById('txtTotalGeral').innerText = `Total: ${totalAulasGeral} sessões | ${totalGeral.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
+      document.getElementById('tituloFinal').innerText = `Relatório de Sessões (até ${dia}/${mes}/${ano})`;
+      document.getElementById('resumoValores').innerText = `Total: ${totalSessoes} sessões | ${totalGeral.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
 
-      document.getElementById('secaoRelatorioFinal').style.display = 'block';
-      document.getElementById('secaoRelatorioFinal').scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('secaoResultadoFinal').style.display = 'block';
+      document.getElementById('secaoResultadoFinal').scrollIntoView({ behavior: 'smooth' });
     }
   </script>
 </body>
