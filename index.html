@@ -246,14 +246,12 @@
     let dadosCrianças = {};
 
     window.onload = () => {
-      // Preencher mês e data atual por padrão
       const hoje = new Date();
       const ano = hoje.getFullYear();
       const mes = String(hoje.getMonth() + 1).padStart(2, '0');
       document.getElementById('inputMes').value = `${ano}-${mes}`;
       atualizarLimiteMes();
 
-      // Configuração do cliente OAuth2
       tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: CLIENT_ID,
         scope: 'https://www.googleapis.com/auth/calendar.readonly',
@@ -263,7 +261,6 @@
         }
       });
 
-      // Tentar restaurar login salvo anteriormente
       const tokenSalvo = localStorage.getItem(KEY_STORAGE_TOKEN);
       if (tokenSalvo) {
         definirToken(tokenSalvo, false);
@@ -277,11 +274,9 @@
       
       const hoje = new Date();
       if (hoje.getFullYear() === ano && (hoje.getMonth() + 1) === mes) {
-        // Se for o mês corrente, limita até a data de hoje
         const dia = String(hoje.getDate()).padStart(2, '0');
         document.getElementById('inputDataAte').value = `${ano}-${String(mes).padStart(2, '0')}-${dia}`;
       } else {
-        // Mês fechado: último dia do mês
         const ultDia = new Date(ano, mes, 0).getDate();
         document.getElementById('inputDataAte').value = `${ano}-${String(mes).padStart(2, '0')}-${String(ultDia).padStart(2, '0')}`;
       }
@@ -307,7 +302,6 @@
         headers: { Authorization: `Bearer ${accessToken}` }
       });
       if (resp.status === 401) {
-        // Token expirou: pede nova autorização limpa
         localStorage.removeItem(KEY_STORAGE_TOKEN);
         document.getElementById('btnConexao').style.display = 'block';
         document.getElementById('badgeConectado').style.display = 'none';
@@ -317,21 +311,14 @@
       return await resp.json();
     }
 
-    // Localiza e fixa unicamente a agenda "Pardal"
     async function identificarAgendaPardal() {
       const data = await fetchGoogle('https://www.googleapis.com/calendar/v3/users/me/calendarList');
       if (!data || !data.items) return;
 
       const encontrada = data.items.find(cal => cal.summary.toLowerCase().includes('pardal'));
-      if (encontrada) {
-        agendaPardalId = encontrada.id;
-      } else {
-        // Se não tiver o nome Pardal explícito, usa a agenda principal da conta
-        agendaPardalId = 'primary';
-      }
+      agendaPardalId = encontrada ? encontrada.id : 'primary';
     }
 
-    // Memória local de valores das crianças
     function getPrecosSalvos() {
       try {
         return JSON.parse(localStorage.getItem(KEY_STORAGE_VALORES)) || {};
@@ -344,6 +331,27 @@
       const salvos = getPrecosSalvos();
       salvos[nome.trim()] = valor;
       localStorage.setItem(KEY_STORAGE_VALORES, JSON.stringify(salvos));
+    }
+
+    // Filtro para ignorar pontos, pagamentos e lembretes financeiros
+    function deveIgnorarEvento(nome) {
+      const limpo = nome.trim().toLowerCase();
+      
+      // Ignora nomes que são apenas pontos ou símbolos sem letras/números
+      if (/^[.\s\-–—_]+$/.test(limpo)) return true;
+
+      // Ignora contas, pagamentos e aniversários
+      if (limpo.includes('pagar conta') || 
+          limpo.includes('pagamento') || 
+          limpo.includes('pagar') || 
+          limpo.includes('conta') ||
+          limpo.includes('boleto') ||
+          limpo.includes('aniversário') ||
+          limpo.includes('aniversario')) {
+        return true;
+      }
+
+      return false;
     }
 
     async function buscarAulasPardal() {
@@ -375,7 +383,7 @@
       dadosCrianças = {};
       data.items.forEach(ev => {
         const nome = (ev.summary || '').trim();
-        if (!nome) return;
+        if (!nome || deveIgnorarEvento(nome)) return;
 
         const inicio = ev.start?.dateTime || ev.start?.date;
         if (!inicio) return;
@@ -403,12 +411,11 @@
         const item = dadosCrianças[nome];
         const diasStr = Array.from(item.dias).sort((a, b) => Number(a) - Number(b)).join(', ');
         const valorSalvo = precos[nome] !== undefined ? precos[nome] : '';
-        const ehCrianca = !nome.toLowerCase().includes('aniversário') && !nome.toLowerCase().includes('aniversario');
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td class="col-check">
-            <input type="checkbox" id="chk_${i}" data-nome="${nome}" ${ehCrianca ? 'checked' : ''}>
+            <input type="checkbox" id="chk_${i}" data-nome="${nome}" checked>
           </td>
           <td><strong>${nome}</strong></td>
           <td class="col-dias">${diasStr}</td>
