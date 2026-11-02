@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Relatório Mensal de Aulas - Espaço EDM</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 720px; margin: 30px auto; padding: 0 20px; color: #333; }
+    h1 { color: #1a365d; font-size: 1.5rem; margin-bottom: 20px; }
+    .card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 0.9rem; }
+    input, select, button { padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; }
+    input[type="month"], input[type="number"], select { width: 100%; box-sizing: border-box; }
+    button { background: #2563eb; color: #fff; border: none; cursor: pointer; font-weight: 600; width: 100%; padding: 10px; margin-top: 10px; }
+    button:hover { background: #1d4ed8; }
+    button:disabled { background: #94a3b8; cursor: not-allowed; }
+    .agenda-list { max-height: 140px; overflow-y: auto; background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px; }
+    .agenda-item { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 0.9rem; }
+    .agenda-item input { width: auto; }
+    .results { margin-top: 20px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; }
+    .kpi-row { display: flex; gap: 15px; margin-bottom: 15px; }
+    .kpi { flex: 1; background: #f1f5f9; padding: 12px; border-radius: 6px; text-align: center; }
+    .kpi-val { font-size: 1.4rem; font-weight: bold; color: #0f172a; }
+    .kpi-lbl { font-size: 0.8rem; color: #64748b; text-transform: uppercase; margin-top: 4px; }
+    .dias-box { background: #f8fafc; border: 1px dashed #cbd5e1; padding: 12px; border-radius: 6px; font-size: 0.95rem; }
+    .tag-dia { display: inline-block; background: #e0e7ff; color: #3730a3; padding: 2px 8px; border-radius: 4px; margin: 2px; font-weight: 600; font-size: 0.85rem; }
+  </style>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+
+  <h1>Relatório Mensal de Aulas - Espaço EDM</h1>
+
+  <div class="card">
+    <button id="btnAuth" onclick="handleAuth()">Conectar Google Agenda</button>
+  </div>
+
+  <div id="appBody" class="card" style="display: none;">
+    <div class="form-group">
+      <label>1. Escolha as agendas:</label>
+      <div id="calendarsList" class="agenda-list">Carregando agendas...</div>
+    </div>
+
+    <div class="form-group">
+      <label for="monthRef">2. Mês de referência:</label>
+      <input type="month" id="monthRef">
+    </div>
+
+    <div class="form-group">
+      <label for="valAula">3. Valor por aula (R$):</label>
+      <input type="number" id="valAula" value="0.00" step="0.50" min="0">
+    </div>
+
+    <button id="btnBuscar" onclick="calcularRelatorio()">Puxar Aulas e Calcular</button>
+  </div>
+
+  <div id="resultadoBox" class="results" style="display: none;">
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-val" id="totalAulas">0</div>
+        <div class="kpi-lbl">Total de Aulas</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-val" id="totalValor">R$ 0,00</div>
+        <div class="kpi-lbl">Faturamento Total</div>
+      </div>
+    </div>
+
+    <div class="dias-box">
+      <strong>Dias com aula:</strong>
+      <div id="diasList" style="margin-top: 8px;"></div>
+    </div>
+  </div>
+
+  <script>
+    // CONFIGURAÇÃO DO GOOGLE CONSOLE
+    // Cole aqui o ID do Cliente Web gerado no Google Cloud Console:
+    const CLIENT_ID = 'SEU_CLIENT_ID_AQUI.apps.googleusercontent.com';
+    const SCOPES = 'https://www.googleapis.com/auth/calendar.readonly';
+
+    let tokenClient;
+    let accessToken = null;
+
+    window.onload = () => {
+      // Inicializa o cliente OAuth2
+      tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: SCOPES,
+        callback: (resp) => {
+          if (resp.error) throw resp;
+          accessToken = resp.access_token;
+          document.getElementById('btnAuth').style.display = 'none';
+          document.getElementById('appBody').style.display = 'block';
+          carregarAgendas();
+        },
+      });
+
+      // Padrão: mês atual no seletor
+      const now = new Date();
+      const ano = now.getFullYear();
+      const mes = String(now.getMonth() + 1).padStart(2, '0');
+      document.getElementById('monthRef').value = `${ano}-${mes}`;
+    };
+
+    function handleAuth() {
+      if (!CLIENT_ID || CLIENT_ID.includes('SEU_CLIENT_ID')) {
+        alert('Configure o CLIENT_ID no código antes de conectar!');
+        return;
+      }
+      tokenClient.requestAccessToken({ prompt: 'consent' });
+    }
+
+    async function apiRequest(url) {
+      const resp = await fetch(url, {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
+      return await resp.json();
+    }
+
+    async function carregarAgendas() {
+      const container = document.getElementById('calendarsList');
+      try {
+        const data = await apiRequest('https://www.googleapis.com/calendar/v3/users/me/calendarList');
+        container.innerHTML = '';
+        data.items.forEach(cal => {
+          const div = document.createElement('div');
+          div.className = 'agenda-item';
+          div.innerHTML = `
+            <input type="checkbox" id="${cal.id}" value="${cal.id}" checked>
+            <label for="${cal.id}" style="margin:0;font-weight:normal;cursor:pointer;">${cal.summary}</label>
+          `;
+          container.appendChild(div);
+        });
+      } catch (e) {
+        container.innerHTML = 'Erro ao carregar agendas.';
+      }
+    }
+
+    async function calcularRelatorio() {
+      const monthVal = document.getElementById('monthRef').value;
+      if (!monthVal) return alert('Selecione um mês.');
+
+      const checkboxes = document.querySelectorAll('#calendarsList input[type="checkbox"]:checked');
+      if (checkboxes.length === 0) return alert('Selecione pelo menos uma agenda.');
+
+      const [ano, mes] = monthVal.split('-').map(Number);
+      const timeMin = new Date(ano, mes - 1, 1, 0, 0, 0).toISOString();
+      const timeMax = new Date(ano, mes, 0, 23, 59, 59).toISOString();
+
+      let todosEventos = [];
+      document.getElementById('btnBuscar').disabled = true;
+      document.getElementById('btnBuscar').innerText = 'Buscando aulas...';
+
+      for (const cb of checkboxes) {
+        const calId = encodeURIComponent(cb.value);
+        const url = `https://www.googleapis.com/calendar/v3/calendars/${calId}/events?timeMin=${timeMin}&timeMax=${timeMax}&singleEvents=true&orderBy=startTime`;
+        const data = await apiRequest(url);
+        if (data.items) {
+          todosEventos = todosEventos.concat(data.items);
+        }
+      }
+
+      document.getElementById('btnBuscar').disabled = false;
+      document.getElementById('btnBuscar').innerText = 'Puxar Aulas e Calcular';
+
+      // Filtragem e extração de dias
+      const diasEncontrados = new Set();
+      let contagemAulas = 0;
+
+      todosEventos.forEach(ev => {
+        // Ignora eventos de dia inteiro ou cancelados se necessário
+        const startStr = ev.start?.dateTime || ev.start?.date;
+        if (!startStr) return;
+
+        const dataObj = new Date(startStr);
+        const diaFormatado = String(dataObj.getDate()).padStart(2, '0');
+        
+        diasEncontrados.add(diaFormatado);
+        contagemAulas++;
+      });
+
+      // Ordenar os dias em ordem crescente (ex: 02, 04, 14, 17)
+      const diasOrdenados = Array.from(diasEncontrados).sort((a, b) => Number(a) - Number(b));
+
+      // Valores
+      const valUnit = parseFloat(document.getElementById('valAula').value) || 0;
+      const faturamento = contagemAulas * valUnit;
+
+      // Exibir no DOM
+      document.getElementById('totalAulas').innerText = contagemAulas;
+      document.getElementById('totalValor').innerText = faturamento.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+      const diasContainer = document.getElementById('diasList');
+      if (diasOrdenados.length > 0) {
+        diasContainer.innerHTML = diasOrdenados.map(d => `<span class="tag-dia">Dia ${d}</span>`).join(' ');
+      } else {
+        diasContainer.innerHTML = '<em>Nenhuma aula encontrada no período.</em>';
+      }
+
+      document.getElementById('resultadoBox').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
