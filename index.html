@@ -8,316 +8,412 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: #f1f5f9;
+      background-color: #ffffff;
       color: #1e293b;
-      display: flex;
-      justify-content: center;
-      padding: 40px 16px;
+      padding: 30px 24px;
     }
-    .container {
-      background: #ffffff;
-      width: 100%;
-      max-width: 580px;
-      border-radius: 12px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-      padding: 28px;
+    .wrapper {
+      max-width: 900px;
+      margin: 0 auto;
     }
     h1 {
-      font-size: 1.35rem;
+      font-size: 1.5rem;
       font-weight: 700;
       color: #0f172a;
-      margin-bottom: 20px;
-      text-align: center;
+      margin-bottom: 24px;
+    }
+    h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 24px 0 14px 0;
     }
     .btn-auth {
-      width: 100%;
       background-color: #0284c7;
       color: #ffffff;
       border: none;
-      border-radius: 8px;
-      padding: 12px;
-      font-size: 1rem;
+      border-radius: 6px;
+      padding: 10px 18px;
+      font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
     }
     .btn-auth:hover { background-color: #0369a1; }
-    .campo { margin-bottom: 18px; }
-    label {
-      display: block;
-      font-weight: 600;
-      font-size: 0.9rem;
-      margin-bottom: 6px;
-      color: #334155;
+    .filtros-topo {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
     }
-    input[type="month"], input[type="number"] {
-      width: 100%;
-      padding: 10px;
+    .campo-inline {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+    input[type="date"], input[type="month"] {
+      padding: 6px 10px;
       border: 1px solid #cbd5e1;
       border-radius: 6px;
       font-size: 0.95rem;
-      background-color: #f8fafc;
     }
-    .lista-agendas {
-      border: 1px solid #cbd5e1;
+    .btn-acao {
+      align-self: flex-start;
+      background-color: #0284c7;
+      color: #ffffff;
+      border: none;
       border-radius: 6px;
-      padding: 10px;
-      max-height: 150px;
-      overflow-y: auto;
-      background-color: #f8fafc;
+      padding: 10px 18px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
     }
-    .item-agenda {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
-      font-size: 0.9rem;
-    }
-    .item-agenda input { cursor: pointer; }
-    .btn-gerar {
-      width: 100%;
+    .btn-acao:hover { background-color: #0369a1; }
+    .btn-gerar-final {
       background-color: #16a34a;
       color: #ffffff;
       border: none;
-      border-radius: 8px;
-      padding: 12px;
+      border-radius: 6px;
+      padding: 10px 20px;
       font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
-      margin-top: 10px;
+      margin: 20px 0;
     }
-    .btn-gerar:hover { background-color: #15803d; }
-    .btn-gerar:disabled { background-color: #94a3b8; cursor: not-allowed; }
-    .card-resultado {
-      margin-top: 24px;
-      padding-top: 20px;
-      border-top: 2px dashed #e2e8f0;
+    .btn-gerar-final:hover { background-color: #15803d; }
+    
+    /* Tabelas */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
     }
-    .resumo-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 14px;
+    th {
+      background-color: #1e3a5f;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-align: left;
+      padding: 10px 12px;
+      border: 1px solid #1e3a5f;
     }
-    .bloco-dado {
-      background: #f8fafc;
+    td {
+      padding: 8px 12px;
       border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 14px;
-      text-align: center;
+      font-size: 0.9rem;
+      vertical-align: middle;
     }
-    .bloco-dado .valor {
-      font-size: 1.4rem;
+    tr:nth-child(even) { background-color: #f8fafc; }
+    .col-check { width: 50px; text-align: center; }
+    .col-check input { width: 16px; height: 16px; cursor: pointer; }
+    .col-sessao { width: 70px; text-align: center; font-weight: 600; }
+    .col-valor { width: 130px; }
+    .input-preco {
+      width: 100%;
+      padding: 6px 8px;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+    .tag-dias {
+      color: #2563eb;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    .total-geral {
+      margin-top: 15px;
+      text-align: right;
+      font-size: 1.15rem;
       font-weight: 700;
       color: #0f172a;
     }
-    .bloco-dado .descricao {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #64748b;
-      text-transform: uppercase;
-      margin-top: 4px;
+    .agenda-box {
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 10px;
+      max-height: 120px;
+      overflow-y: auto;
+      margin-bottom: 15px;
+      max-width: 450px;
     }
-    .bloco-dias {
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
-      border-radius: 8px;
-      padding: 12px 14px;
-      font-size: 0.95rem;
-      color: #1e3a8a;
+    .agenda-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+      font-size: 0.85rem;
     }
-    .bloco-dias strong { display: block; margin-bottom: 4px; }
   </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
-  <div class="container">
-    <h1>Relatório Mensal de Aulas - Espaço EDM</h1>
+  <div class="wrapper">
+    <h1>Relatório de Aulas - Espaço EDM</h1>
 
-    <!-- Botão de login -->
-    <div id="secaoLogin">
-      <button class="btn-auth" onclick="iniciarConexao()">
-        Conectar Google Agenda
-      </button>
+    <!-- Autenticação -->
+    <div id="authSection" style="margin-bottom: 20px;">
+      <button class="btn-auth" onclick="autenticarGoogle()">Conectar Google Agenda</button>
     </div>
 
-    <!-- Painel de filtros -->
-    <div id="painelConfig" style="display: none;">
-      <div class="campo">
-        <label>Escolha as agendas:</label>
-        <div id="boxAgendas" class="lista-agendas">Buscando suas agendas...</div>
-      </div>
-
-      <div class="campo">
-        <label for="mesRef">1. Mês de referência:</label>
-        <input type="month" id="mesRef">
-      </div>
-
-      <div class="campo">
-        <label for="valorAula">2. Valor por aula (R$):</label>
-        <input type="number" id="valorAula" value="0.00" step="0.50" min="0">
-      </div>
-
-      <button id="btnConsultar" class="btn-gerar" onclick="processarRelatorio()">Puxar Aulas e Calcular</button>
-    </div>
-
-    <!-- Resultados -->
-    <div id="blocoResultado" class="card-resultado" style="display: none;">
-      <div class="resumo-grid">
-        <div class="bloco-dado">
-          <div class="valor" id="txtTotalAulas">0</div>
-          <div class="descricao">Total de Aulas</div>
+    <!-- Etapa 1: Filtros de Período e Agendas -->
+    <div id="appControls" style="display: none;">
+      <div class="filtros-topo">
+        <div>
+          <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 4px;">Escolha as agendas:</label>
+          <div id="listaAgendas" class="agenda-box">Carregando agendas...</div>
         </div>
-        <div class="bloco-dado">
-          <div class="valor" id="txtValorTotal">R$ 0,00</div>
-          <div class="descricao">Valor Total</div>
+
+        <div class="campo-inline">
+          <label for="filtroDataAte">Contar sessões até o dia:</label>
+          <input type="date" id="filtroDataAte">
         </div>
+
+        <button class="btn-acao" id="btnBuscar" onclick="buscarSessoesDaAgenda()">Buscar crianças da agenda</button>
       </div>
 
-      <div class="bloco-dias">
-        <strong>Dias do mês com aula:</strong>
-        <span id="txtDiasLista">-</span>
+      <!-- Etapa 2: Tabela de seleção de crianças e edição de valores -->
+      <div id="secaoConfiguracao" style="display: none;">
+        <h2>2. Desmarque o que não é criança e coloque o valor da sessão</h2>
+        <table>
+          <thead>
+            <tr>
+              <th class="col-check">Incluir</th>
+              <th>Nome no evento</th>
+              <th style="width: 140px;">Dias no mês</th>
+              <th class="col-sessao">Sessões</th>
+              <th class="col-valor">Valor (R$)</th>
+            </tr>
+          </thead>
+          <tbody id="corpoTabelaConfig"></tbody>
+        </table>
+
+        <button class="btn-gerar-final" onclick="gerarRelatorioFinal()">Gerar Relatório Consolidado</button>
+      </div>
+
+      <!-- Etapa 3: Relatório Final -->
+      <div id="secaoRelatorioFinal" style="display: none;">
+        <h2 id="tituloRelatorioFinal">Relatório de Sessões</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Criança</th>
+              <th>Dias</th>
+              <th class="col-sessao">Sessões</th>
+              <th>Valor da sessão</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="corpoTabelaFinal"></tbody>
+        </table>
+        <div class="total-geral" id="txtTotalGeral"></div>
       </div>
     </div>
   </div>
 
   <script>
-    // ID do cliente OAuth corrigido
     const GOOGLE_CLIENT_ID = '846101014697-0nrq60gv7sgelmgtslncq3a0cds0osff.apps.googleusercontent.com';
+    const CHAVE_STORAGE = 'edm_valores_criancas';
 
     let tokenClient;
     let tokenAcesso = null;
+    let mapaAlunos = {};
 
     window.onload = () => {
+      // Define a data atual no filtro
       const hoje = new Date();
-      const anoAtual = hoje.getFullYear();
-      const mesAtual = String(hoje.getMonth() + 1).padStart(2, '0');
-      document.getElementById('mesRef').value = `${anoAtual}-${mesAtual}`;
+      document.getElementById('filtroDataAte').value = hoje.toISOString().split('T')[0];
 
       tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: GOOGLE_CLIENT_ID,
         scope: 'https://www.googleapis.com/auth/calendar.readonly',
         callback: (resp) => {
-          if (resp.error) {
-            alert('Falha ao autenticar com o Google.');
-            return;
-          }
+          if (resp.error) return alert('Falha ao autenticar.');
           tokenAcesso = resp.access_token;
-          document.getElementById('secaoLogin').style.display = 'none';
-          document.getElementById('painelConfig').style.display = 'block';
-          listarCalendarios();
+          document.getElementById('authSection').style.display = 'none';
+          document.getElementById('appControls').style.display = 'block';
+          carregarAgendas();
         }
       });
     };
 
-    function iniciarConexao() {
+    function autenticarGoogle() {
       tokenClient.requestAccessToken({ prompt: 'consent' });
     }
 
-    async function consultaApi(endpoint) {
-      const resp = await fetch(endpoint, {
+    async function apiRequest(url) {
+      const resp = await fetch(url, {
         headers: { Authorization: `Bearer ${tokenAcesso}` }
       });
       return await resp.json();
     }
 
-    async function listarCalendarios() {
-      const box = document.getElementById('boxAgendas');
+    // Carrega agendas da conta
+    async function carregarAgendas() {
+      const container = document.getElementById('listaAgendas');
       try {
-        const dados = await consultaApi('https://www.googleapis.com/calendar/v3/users/me/calendarList');
-        box.innerHTML = '';
-
-        if (!dados.items || dados.items.length === 0) {
-          box.innerHTML = 'Nenhuma agenda encontrada.';
+        const data = await apiRequest('https://www.googleapis.com/calendar/v3/users/me/calendarList');
+        container.innerHTML = '';
+        if (!data.items || data.items.length === 0) {
+          container.innerHTML = 'Nenhuma agenda encontrada.';
           return;
         }
-
-        dados.items.forEach(cal => {
+        data.items.forEach(cal => {
           const div = document.createElement('div');
-          div.className = 'item-agenda';
+          div.className = 'agenda-item';
           div.innerHTML = `
             <input type="checkbox" id="cal_${cal.id}" value="${cal.id}" checked>
-            <label for="cal_${cal.id}" style="margin:0; font-weight:normal; cursor:pointer;">${cal.summary}</label>
+            <label for="cal_${cal.id}" style="cursor:pointer;">${cal.summary}</label>
           `;
-          box.appendChild(div);
+          container.appendChild(div);
         });
       } catch (e) {
-        box.innerHTML = 'Erro ao carregar lista de agendas.';
+        container.innerHTML = 'Erro ao carregar agendas.';
       }
     }
 
-    async function processarRelatorio() {
-      const mesRefVal = document.getElementById('mesRef').value;
-      if (!mesRefVal) {
-        alert('Por favor, selecione o mês de referência.');
-        return;
+    // Memória Local de Valores
+    function obterValoresSalvos() {
+      try {
+        return JSON.parse(localStorage.getItem(CHAVE_STORAGE)) || {};
+      } catch (e) {
+        return {};
       }
+    }
 
-      const checks = document.querySelectorAll('#boxAgendas input[type="checkbox"]:checked');
-      if (checks.length === 0) {
-        alert('Selecione pelo menos uma agenda na lista.');
-        return;
-      }
+    function salvarValorNoStorage(nome, valor) {
+      const salvos = obterValoresSalvos();
+      salvos[nome.trim()] = valor;
+      localStorage.setItem(CHAVE_STORAGE, JSON.stringify(salvos));
+    }
 
-      const btn = document.getElementById('btnConsultar');
+    // Busca e agrupamento dos eventos por criança
+    async function buscarSessoesDaAgenda() {
+      const dataAteStr = document.getElementById('filtroDataAte').value;
+      if (!dataAteStr) return alert('Selecione a data limite.');
+
+      const checkboxes = document.querySelectorAll('#listaAgendas input[type="checkbox"]:checked');
+      if (checkboxes.length === 0) return alert('Selecione pelo menos uma agenda.');
+
+      const [ano, mes, dia] = dataAteStr.split('-').map(Number);
+      const timeMin = new Date(ano, mes - 1, 1, 0, 0, 0).toISOString();
+      const timeMax = new Date(ano, mes - 1, dia, 23, 59, 59).toISOString();
+
+      const btn = document.getElementById('btnBuscar');
       btn.disabled = true;
-      btn.innerText = 'Calculando...';
+      btn.innerText = 'Carregando agenda...';
 
-      const [ano, mes] = mesRefVal.split('-').map(Number);
-      const dataInicio = new Date(ano, mes - 1, 1, 0, 0, 0).toISOString();
-      const dataFim = new Date(ano, mes, 0, 23, 59, 59).toISOString();
-
-      let listaEventos = [];
-
-      for (const chk of checks) {
-        const idCodificado = encodeURIComponent(chk.value);
-        const url = `https://www.googleapis.com/calendar/v3/calendars/${idCodificado}/events?timeMin=${dataInicio}&timeMax=${dataFim}&singleEvents=true&orderBy=startTime`;
-        const res = await consultaApi(url);
-        if (res.items) {
-          listaEventos = listaEventos.concat(res.items);
-        }
+      let todosEventos = [];
+      for (const cb of checkboxes) {
+        const idCal = encodeURIComponent(cb.value);
+        const url = `https://www.googleapis.com/calendar/v3/calendars/${idCal}/events?timeMin=${timeMin}&timeMax=${timeMax}&singleEvents=true&orderBy=startTime`;
+        const res = await apiRequest(url);
+        if (res.items) todosEventos = todosEventos.concat(res.items);
       }
 
       btn.disabled = false;
-      btn.innerText = 'Puxar Aulas e Calcular';
+      btn.innerText = 'Buscar crianças da agenda';
 
-      const setDias = new Set();
-      let quantidadeAulas = 0;
+      // Agrupar por nome do evento e coletar dias
+      mapaAlunos = {};
+      todosEventos.forEach(ev => {
+        const nome = (ev.summary || '').trim();
+        if (!nome) return;
 
-      listaEventos.forEach(ev => {
         const inicio = ev.start?.dateTime || ev.start?.date;
         if (!inicio) return;
 
-        const dataEvento = new Date(inicio);
-        const diaComDoisDigitos = String(dataEvento.getDate()).padStart(2, '0');
+        const diaNum = String(new Date(inicio).getDate()).padStart(2, '0');
 
-        setDias.add(diaComDoisDigitos);
-        quantidadeAulas++;
+        if (!mapaAlunos[nome]) {
+          mapaAlunos[nome] = { sessoes: 0, dias: new Set() };
+        }
+        mapaAlunos[nome].sessoes += 1;
+        mapaAlunos[nome].dias.add(diaNum);
       });
 
-      const diasOrdenados = Array.from(setDias).sort((a, b) => Number(a) - Number(b));
+      renderizarTabelaConfiguracao();
+    }
 
-      const precoAula = parseFloat(document.getElementById('valorAula').value) || 0;
-      const faturamentoTotal = quantidadeAulas * precoAula;
+    function renderizarTabelaConfiguracao() {
+      const tbody = document.getElementById('corpoTabelaConfig');
+      tbody.innerHTML = '';
 
-      document.getElementById('txtTotalAulas').innerText = quantidadeAulas;
-      document.getElementById('txtValorTotal').innerText = faturamentoTotal.toLocaleString('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
+      const valoresSalvos = obterValoresSalvos();
+      const nomes = Object.keys(mapaAlunos).sort((a, b) => a.localeCompare(b));
+
+      nomes.forEach((nome, idx) => {
+        const item = mapaAlunos[nome];
+        const diasFormatados = Array.from(item.dias).sort((a, b) => Number(a) - Number(b)).join(', ');
+        const valorSalvo = valoresSalvos[nome] !== undefined ? valoresSalvos[nome] : '';
+
+        // Filtro prévio: desmarca eventos que parecem compromissos/aniversários
+        const provavelCrianca = !nome.toLowerCase().includes('aniversário') && !nome.toLowerCase().includes('aniversario');
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="col-check">
+            <input type="checkbox" id="chk_${idx}" data-nome="${nome}" ${provavelCrianca ? 'checked' : ''}>
+          </td>
+          <td><strong>${nome}</strong></td>
+          <td class="tag-dias">${diasFormatados}</td>
+          <td class="col-sessao">${item.sessoes}</td>
+          <td class="col-valor">
+            <input type="number" class="input-preco" id="val_${idx}" data-nome="${nome}" value="${valorSalvo}" placeholder="0" step="5" onchange="salvarValorNoStorage('${nome}', this.value)">
+          </td>
+        `;
+        tbody.appendChild(tr);
       });
 
-      const txtDias = document.getElementById('txtDiasLista');
-      if (diasOrdenados.length > 0) {
-        txtDias.innerText = diasOrdenados.join(', ');
-      } else {
-        txtDias.innerText = 'Nenhuma aula encontrada para este mês.';
-      }
+      document.getElementById('secaoConfiguracao').style.display = 'block';
+      document.getElementById('secaoRelatorioFinal').style.display = 'none';
+    }
 
-      document.getElementById('blocoResultado').style.display = 'block';
+    function gerarRelatorioFinal() {
+      const tbody = document.getElementById('corpoTabelaFinal');
+      tbody.innerHTML = '';
+
+      const rows = document.querySelectorAll('#corpoTabelaConfig tr');
+      let totalGeral = 0;
+      let totalAulasGeral = 0;
+
+      rows.forEach(tr => {
+        const chk = tr.querySelector('input[type="checkbox"]');
+        if (!chk || !chk.checked) return;
+
+        const nome = chk.getAttribute('data-nome');
+        const inputVal = tr.querySelector('.input-preco');
+        const valorUnitario = parseFloat(inputVal.value) || 0;
+
+        const item = mapaAlunos[nome];
+        const subtotal = item.sessoes * valorUnitario;
+        totalGeral += subtotal;
+        totalAulasGeral += item.sessoes;
+
+        const diasFormatados = Array.from(item.dias).sort((a, b) => Number(a) - Number(b)).join(', ');
+
+        const trFinal = document.createElement('tr');
+        trFinal.innerHTML = `
+          <td><strong>${nome}</strong></td>
+          <td class="tag-dias">${diasFormatados}</td>
+          <td class="col-sessao">${item.sessoes}</td>
+          <td>${valorUnitario.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+          <td><strong>${subtotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</strong></td>
+        `;
+        tbody.appendChild(trFinal);
+      });
+
+      const dataAte = document.getElementById('filtroDataAte').value;
+      const partes = dataAte.split('-');
+      const dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
+      
+      document.getElementById('tituloRelatorioFinal').innerText = `Relatório de Sessões (até ${dataFormatada})`;
+      document.getElementById('txtTotalGeral').innerText = `Total: ${totalAulasGeral} sessões | ${totalGeral.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
+
+      document.getElementById('secaoRelatorioFinal').style.display = 'block';
+      document.getElementById('secaoRelatorioFinal').scrollIntoView({ behavior: 'smooth' });
     }
   </script>
 </body>
