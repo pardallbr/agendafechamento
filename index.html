@@ -186,13 +186,14 @@
       color: #ffffff;
       border: none;
       border-radius: 4px;
-      padding: 8px 14px;
-      font-size: 0.85rem;
+      padding: 9px 16px;
+      font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+      text-decoration: none;
     }
     .btn-whatsapp:hover { background-color: #1eb954; }
     
@@ -335,10 +336,10 @@
         </table>
         <div class="total-painel" id="resumoValores"></div>
 
-        <!-- Botão WhatsApp no final do relatório -->
+        <!-- Botão para abrir o WhatsApp Web sem texto pré-carregado -->
         <div class="rodape-whatsapp">
-          <button class="btn-whatsapp" onclick="enviarWhatsApp()">
-            💬 Enviar Relatório via WhatsApp
+          <button class="btn-whatsapp" onclick="abrirWhatsAppLimpo()">
+            💬 Abrir WhatsApp Web
           </button>
         </div>
       </div>
@@ -616,32 +617,9 @@
       document.body.removeChild(link);
     }
 
-    // Enviar relatório formatado diretamente via WhatsApp
-    function enviarWhatsApp() {
-      const linhas = document.querySelectorAll('#corpoTabelaFinal tr');
-      if (linhas.length === 0) return alert('Gere o relatório antes de compartilhar via WhatsApp.');
-
-      const titulo = document.getElementById('tituloFinal').innerText;
-      const resumo = document.getElementById('resumoValores').innerText;
-
-      let mensagem = `*${titulo}*\n*Espaço EDM*\n\n`;
-
-      linhas.forEach(tr => {
-        const cols = tr.querySelectorAll('td');
-        if (cols.length >= 5) {
-          const nome = cols[0].innerText.trim();
-          const dias = cols[1].innerText.trim();
-          const sessoes = cols[2].innerText.trim();
-          const total = cols[4].innerText.trim();
-
-          mensagem += `• *${nome}*: ${sessoes} aulas (Dias: ${dias}) - Total: ${total}\n`;
-        }
-      });
-
-      mensagem += `\n📊 *${resumo}*`;
-
-      const urlWhatsApp = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
-      window.open(urlWhatsApp, '_blank');
+    // Apenas abre o WhatsApp Web sem texto pré-carregado
+    function abrirWhatsAppLimpo() {
+      window.open('https://web.whatsapp.com/', '_blank');
     }
   </script>
 </body>
