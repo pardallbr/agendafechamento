@@ -186,20 +186,18 @@
   </div>
 
   <script>
-    // Client ID configurado diretamente do Google Cloud Console
-    const GOOGLE_CLIENT_ID = '846101014697-0nrq60gv7sgelmgtsincq3a0cds0osff.apps.googleusercontent.com';
+    // ID do cliente OAuth corrigido
+    const GOOGLE_CLIENT_ID = '846101014697-0nrq60gv7sgelmgtslncq3a0cds0osff.apps.googleusercontent.com';
 
     let tokenClient;
     let tokenAcesso = null;
 
     window.onload = () => {
-      // Define mês atual por padrão
       const hoje = new Date();
       const anoAtual = hoje.getFullYear();
       const mesAtual = String(hoje.getMonth() + 1).padStart(2, '0');
       document.getElementById('mesRef').value = `${anoAtual}-${mesAtual}`;
 
-      // Prepara o cliente de login
       tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: GOOGLE_CLIENT_ID,
         scope: 'https://www.googleapis.com/auth/calendar.readonly',
@@ -287,7 +285,6 @@
       btn.disabled = false;
       btn.innerText = 'Puxar Aulas e Calcular';
 
-      // Filtragem dos eventos e extração das datas
       const setDias = new Set();
       let quantidadeAulas = 0;
 
@@ -302,14 +299,11 @@
         quantidadeAulas++;
       });
 
-      // Ordenar os dias numericamente: 02, 05, 14, 21...
       const diasOrdenados = Array.from(setDias).sort((a, b) => Number(a) - Number(b));
 
-      // Cálculo financeiro
       const precoAula = parseFloat(document.getElementById('valorAula').value) || 0;
       const faturamentoTotal = quantidadeAulas * precoAula;
 
-      // Exibição na página
       document.getElementById('txtTotalAulas').innerText = quantidadeAulas;
       document.getElementById('txtValorTotal').innerText = faturamentoTotal.toLocaleString('pt-BR', {
         style: 'currency',
