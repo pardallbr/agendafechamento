@@ -1,626 +1,214 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Relatório Mensal de Aulas - Espaço EDM</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: #f8fafc;
-      color: #1e293b;
-      padding: 30px 16px;
-    }
-    .card {
-      background: #ffffff;
-      width: 100%;
-      max-width: 900px;
-      margin: 0 auto;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-      padding: 32px 36px;
-    }
-    h1 {
-      font-size: 1.35rem;
-      font-weight: 700;
-      color: #1e3a5f;
-      margin-bottom: 20px;
-    }
-    h2 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #1e293b;
-      margin: 28px 0 14px 0;
-    }
-    
-    /* Faixa de conexão */
-    .status-conexao {
-      background-color: #e6f7f4;
-      border: 1px solid #b2e8de;
-      border-radius: 6px;
-      padding: 18px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-    .badge-conectado {
-      background-color: #94a3b8;
-      color: #ffffff;
-      padding: 8px 24px;
-      border-radius: 4px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      cursor: default;
-    }
-    .badge-conectado.ativo {
-      background-color: #64748b;
-    }
-    .btn-conectar {
-      background-color: #0284c7;
-      color: #ffffff;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 22px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .btn-conectar:hover { background-color: #0369a1; }
-
-    /* Campos de Data */
-    .campo-secao {
-      margin-bottom: 18px;
-    }
-    .label-principal {
-      display: block;
-      font-weight: 700;
-      font-size: 1rem;
-      color: #0f172a;
-      margin-bottom: 10px;
-    }
-    .linha-data {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
-      font-size: 0.95rem;
-    }
-    input[type="month"], input[type="date"] {
-      padding: 7px 12px;
-      border: 1px solid #cbd5e1;
-      border-radius: 4px;
-      font-size: 0.95rem;
-      background: #ffffff;
-      color: #334155;
-    }
-    
-    .btn-buscar {
-      background-color: #0284c7;
-      color: #ffffff;
-      border: none;
-      border-radius: 4px;
-      padding: 9px 18px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 4px;
-    }
-    .btn-buscar:hover { background-color: #0369a1; }
-    .btn-buscar:disabled { background-color: #94a3b8; cursor: not-allowed; }
-
-    /* Tabelas */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-    th {
-      background-color: #273e5a;
-      color: #ffffff;
-      font-weight: 600;
-      font-size: 0.9rem;
-      text-align: left;
-      padding: 10px 14px;
-      border: 1px solid #273e5a;
-    }
-    td {
-      padding: 9px 14px;
-      border: 1px solid #e2e8f0;
-      font-size: 0.9rem;
-      vertical-align: middle;
-    }
-    tr:nth-child(even) { background-color: #f8fafc; }
-    .col-check { width: 45px; text-align: center; }
-    .col-check input { width: 16px; height: 16px; cursor: pointer; }
-    .col-sessao { width: 80px; text-align: center; font-weight: 600; }
-    .col-valor { width: 120px; }
-    .col-dias { color: #2563eb; font-weight: 500; }
-    
-    .input-preco {
-      width: 100%;
-      padding: 6px 10px;
-      border: 1px solid #cbd5e1;
-      border-radius: 4px;
-      font-size: 0.9rem;
-    }
-    
-    .btn-gerar-relatorio {
-      background-color: #16a34a;
-      color: #ffffff;
-      border: none;
-      border-radius: 4px;
-      padding: 10px 20px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 18px;
-    }
-    .btn-gerar-relatorio:hover { background-color: #15803d; }
-
-    .grupo-acoes-final {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-secundario {
-      background-color: #475569;
-      color: #ffffff;
-      border: none;
-      border-radius: 4px;
-      padding: 8px 14px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .btn-secundario:hover { background-color: #334155; }
-
-    .btn-whatsapp {
-      background-color: #25d366;
-      color: #ffffff;
-      border: none;
-      border-radius: 4px;
-      padding: 9px 16px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-    }
-    .btn-whatsapp:hover { background-color: #1eb954; }
-    
-    .cabecalho-resultado {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 28px;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    
-    .total-painel {
-      margin-top: 18px;
-      text-align: right;
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #0f172a;
-    }
-
-    .rodape-whatsapp {
-      margin-top: 24px;
-      display: flex;
-      justify-content: flex-end;
-    }
-
-    /* REGRAS PARA IMPRESSÃO / SALVAR EM PDF */
-    @media print {
-      body {
-        background-color: #ffffff;
-        padding: 0;
-      }
-      .card {
-        box-shadow: none;
-        padding: 0;
-        max-width: 100%;
-      }
-      .status-conexao,
-      .campo-secao,
-      #secaoEdicao,
-      .grupo-acoes-final,
-      .rodape-whatsapp {
-        display: none !important;
-      }
-      #secaoResultadoFinal {
-        display: block !important;
-      }
-      table {
-        page-break-inside: auto;
-      }
-      tr {
-        page-break-inside: avoid;
-        page-break-after: auto;
-      }
-      th {
-        background-color: #273e5a !important;
-        color: #ffffff !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-      .col-dias {
-        color: #000000 !important;
-      }
-    }
-  </style>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatório de Aulas - Espaço EDM</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f4f7f6;color:#333;margin:0;padding:20px}
+.container{max-width:1100px;margin:0 auto;background:#fff;padding:30px;border-radius:8px;box-shadow:0 4px 8px rgba(0,0,0,.1)}
+h1{color:#2c3e50;font-size:24px}h3{margin-top:25px;color:#2c3e50}
+input,button{padding:10px;border:1px solid #ccc;border-radius:4px;font-size:16px;box-sizing:border-box}
+button{background:#3498db;color:#fff;border:none;cursor:pointer;font-weight:bold;margin-top:10px;padding:10px 20px}
+button:disabled{background:#bdc3c7;cursor:not-allowed}
+#btnAuth:not(:disabled){background:#27ae60}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{border:1px solid #ddd;padding:10px;text-align:left}
+th{background:#2c3e50;color:#fff}
+td input[type=number]{width:120px}
+.total-box{margin-top:20px;font-size:18px;font-weight:bold;text-align:right;background:#eef2f3;padding:15px;border-radius:4px}
+.auth-box{background:#e8f8f5;padding:15px;border-radius:6px;margin-bottom:20px;border:1px solid #a3e4d7;text-align:center}
+.erro-box{background:#fdecea;border:1px solid #f5c6cb;color:#611a15;padding:12px;border-radius:6px;margin-top:15px;font-size:14px}
+.chk{display:block;margin:6px 0}
+.text-center{text-align:center}
+</style>
 </head>
 <body>
+<div class="container">
+<h1>Relatório Mensal de Aulas - Espaço EDM</h1>
+<div class="auth-box">
+<button id="btnAuth" disabled>Carregando sistema do Google...</button>
+<div id="msg"></div>
+</div>
+<div id="app" style="display:none">
+<div id="blocoAg"><h3>Escolha as agendas</h3>
+<div id="agendas"></div></div>
+<h3>1. Mês de referência</h3>
+<input type="month" id="mes">
+<br><label class="chk" style="margin-top:12px">Contar sessões até o dia: <input type="date" id="ate"></label>
+<br><button id="btnBuscar">Buscar crianças da agenda</button>
+<div id="lista"></div>
+<div id="resultado"></div>
+</div>
+</div>
 
-  <div class="card">
-    <h1>Relatório Mensal de Aulas - Espaço EDM</h1>
+<script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+<script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
+<script>
+const CLIENT_ID='846101014697-0nrq60gv7sgelmgtslncq3a0cds0osff.apps.googleusercontent.com';
+const API_KEY='AIzaSyArLsqmBTkGynvYwAbb5diFFt7eSXDvGSs';
+const SCOPES='https://www.googleapis.com/auth/calendar.readonly';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let tokenClient,gapiOk=false,gisOk=false,dados=[];
 
-    <!-- Faixa de status e botão de conexão fixa -->
-    <div class="status-conexao">
-      <button id="btnConexao" class="btn-conectar" onclick="autenticar()">Conectar Google Agenda</button>
-      <div id="badgeConectado" class="badge-conectado ativo" style="display: none;">Conectado ✓</div>
-    </div>
+function dataLocal(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function ajustaAte(){const mes=$('mes').value;if(!mes)return;const p=mes.split('-').map(Number),h=new Date(),atual=h.getFullYear()===p[0]&&h.getMonth()+1===p[1];$('ate').value=dataLocal(atual?h:new Date(p[0],p[1],0))}
+function erro(m){$('msg').innerHTML='<div class="erro-box">'+m+'</div>'}
+function falha(e){
+  const st=e&&(e.status||(e.result&&e.result.error&&e.result.error.code));
+  if(st===401||st===403){LS.set('edm_token',null);erro('Sua conexão com o Google expirou. Recarregue a página e clique em "Reconectar".')}
+  else erro('Erro: '+((e&&e.result&&e.result.error&&e.result.error.message)||(e&&e.message)||'desconhecido'));
+}
+function gapiLoaded(){gapi.load('client',async()=>{
+  try{await gapi.client.init({apiKey:API_KEY,discoveryDocs:['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest']});gapiOk=true;pronto()}
+  catch(e){erro('Erro ao iniciar a API do Google. Confira a API Key e se a Google Calendar API está ativada.')}
+})}
+function gisLoaded(){
+  try{tokenClient=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID,scope:SCOPES,callback:onToken,
+    error_callback:e=>erro('Erro no login ('+(e.type||'desconhecido')+'). Confira a origem autorizada no Google Cloud.')});
+    gisOk=true;pronto()}
+  catch(e){erro('Erro ao iniciar o login do Google. Confira o CLIENT_ID.')}
+}
+function pronto(){
+  if(!(gapiOk&&gisOk))return;
+  const t=LS.get('edm_token',null);
+  if(t&&t.exp>Date.now()){gapi.client.setToken({access_token:t.token});conectado();return}
+  const ja=LS.get('edm_ja',false),b=$('btnAuth');
+  b.disabled=false;
+  b.textContent=ja?'Reconectar ao Google Agenda':'Conectar ao Google Agenda';
+  b.onclick=()=>tokenClient.requestAccessToken({prompt:ja?'':'consent'});
+}
+function onToken(r){
+  if(r.error){erro('Erro na autenticação: '+r.error);return}
+  gapi.client.setToken({access_token:r.access_token});
+  LS.set('edm_token',{token:r.access_token,exp:Date.now()+(r.expires_in-120)*1000});
+  LS.set('edm_ja',true);conectado();
+}
+async function conectado(){
+  $('btnAuth').textContent='Conectado ✓';$('btnAuth').disabled=true;$('msg').innerHTML='';
+  $('app').style.display='block';
+  $('mes').value=dataLocal(new Date()).slice(0,7);$('mes').onchange=ajustaAte;ajustaAte();
+  try{
+    const r=await gapi.client.calendar.calendarList.list();
+    const alvo=r.result.items.find(c=>[c.summary,c.summaryOverride].some(x=>/pardal agenda/i.test(x||'')));
+    if(alvo){$('agendas').innerHTML='<input type="checkbox" class="ag" value="'+esc(alvo.id)+'" checked hidden>';$('blocoAg').style.display='none';return}
+    $('blocoAg').style.display='block';
+    const sel=LS.get('edm_ags',null);
+    $('agendas').innerHTML=r.result.items.map(c=>{
+      const ck=sel?sel.includes(c.id):!!c.primary;
+      return '<label class="chk"><input type="checkbox" class="ag" value="'+esc(c.id)+'" '+(ck?'checked':'')+'> '+esc(c.summary)+'</label>';
+    }).join('');
+  }catch(e){falha(e)}
+}
 
-    <!-- Filtros de Referência -->
-    <div id="painelBusca" style="display: none;">
-      <div class="campo-secao">
-        <label class="label-principal" for="inputMes">1. Mês de referência</label>
-        <div style="margin-bottom: 12px;">
-          <input type="month" id="inputMes" onchange="atualizarLimiteMes()">
-        </div>
+$('btnBuscar').onclick=async()=>{
+  const mes=$('mes').value,ags=[...document.querySelectorAll('.ag:checked')].map(x=>x.value);
+  if(!mes){alert('Escolha o mês.');return}
+  if(!ags.length){alert('Marque pelo menos uma agenda.');return}
+  LS.set('edm_ags',ags);
+  $('lista').innerHTML='<p>Buscando na agenda...</p>';$('resultado').innerHTML='';$('msg').innerHTML='';
+  const [a,m]=mes.split('-'),ini=new Date(a,m-1,1).toISOString(),[ay,am,ad]=($('ate').value||mes+'-01').split('-').map(Number),fim=new Date(ay,am-1,ad+1).toISOString(),mapa={};
+  try{
+    for(const id of ags){
+      let pt;
+      do{
+        const p={calendarId:id,timeMin:ini,timeMax:fim,singleEvents:true,orderBy:'startTime',maxResults:2500};
+        if(pt)p.pageToken=pt;
+        const r=await gapi.client.calendar.events.list(p);
+        (r.result.items||[]).forEach(ev=>{
+          if(ev.status==='cancelled'||!ev.summary||!/[\p{L}\p{N}]/u.test(ev.summary))return;
+          const nome=ev.summary.trim(),k=nome.toLowerCase();
+          (mapa[k]=mapa[k]||{nome:nome,n:0,dias:[]}).n++;
+          const diaStr=new Date(ev.start.dateTime||ev.start.date).getDate().toString().padStart(2,'0');
+          if(!mapa[k].dias.includes(diaStr)) mapa[k].dias.push(diaStr);
+        });
+        pt=r.result.nextPageToken;
+      }while(pt);
+    }
+  }catch(e){falha(e);$('lista').innerHTML='';return}
+  dados=Object.keys(mapa).map(k=>({k:k,nome:mapa[k].nome,n:mapa[k].n,dias:mapa[k].dias.sort((x,y)=>x-y)})).sort((x,y)=>x.nome.localeCompare(y.nome));
+  if(!dados.length){$('lista').innerHTML='<div class="erro-box">Nenhum evento encontrado nesse mês.</div>';return}
+  
+  const vals=LS.get('edm_vals',{}),off=LS.get('edm_off',{});
 
-        <div class="linha-data">
-          <span>Contar sessões até o dia:</span>
-          <input type="date" id="inputDataAte">
-        </div>
+  let htmlTable='<h3>2. Desmarque o que não é criança e coloque o valor da sessão</h3>'+
+    '<table><thead><tr><th>Incluir</th><th>Nome no evento</th><th>Sessões</th><th>Valor (R$)</th></tr></thead><tbody>';
+  
+  dados.forEach((d,i)=>{
+    const incChecked=off[d.k]?'':'checked';
+    const valStr=vals[d.k]!==undefined?vals[d.k]:'';
+    htmlTable+='<tr>'+
+      '<td><input type="checkbox" class="inc" data-i="'+i+'" '+incChecked+'></td>'+
+      '<td>'+esc(d.nome)+'</td><td>'+d.n+'</td>'+
+      '<td><input type="number" step="0.01" min="0" class="val" data-i="'+i+'" value="'+valStr+'"></td>'+
+    '</tr>';
+  });
 
-        <button id="btnBuscarAulas" class="btn-buscar" onclick="buscarAulasPardal()">Buscar crianças da agenda</button>
-      </div>
+  htmlTable+='</tbody></table><button id="btnCalc">Calcular total do mês</button>';
+  $('lista').innerHTML=htmlTable;
+  $('btnCalc').onclick=calcular;
+};
 
-      <!-- Etapa 2: Lista com seleção e valores salvos -->
-      <div id="secaoEdicao" style="display: none;">
-        <h2>2. Desmarque o que não é criança e coloque o valor da sessão</h2>
-        <table>
-          <thead>
-            <tr>
-              <th class="col-check">Incluir</th>
-              <th>Nome no evento</th>
-              <th style="width: 140px;">Dias no mês</th>
-              <th class="col-sessao">Sessões</th>
-              <th class="col-valor">Valor (R$)</th>
-            </tr>
-          </thead>
-          <tbody id="corpoTabelaConfig"></tbody>
-        </table>
+function calcular(){
+  const mes=$('mes').value;
+  const vals=LS.get('edm_vals',{}),off=LS.get('edm_off',{}),linhas=[];let tot=0;
+  const cobrados=LS.get('edm_cobrados_'+mes,{});
 
-        <button class="btn-gerar-relatorio" onclick="gerarTabelaFinal()">Gerar Relatório Consolidado</button>
-      </div>
+  dados.forEach((d,i)=>{
+    const inc=document.querySelector('.inc[data-i="'+i+'"]').checked;
+    const v=parseFloat(document.querySelector('.val[data-i="'+i+'"]').value)||0;
+    off[d.k]=!inc;if(v)vals[d.k]=v;else delete vals[d.k];
+    if(inc){
+      const t=d.n*v;
+      tot+=t;
+      linhas.push({k:d.k,nome:d.nome,dias:d.dias.join(', '),n:d.n,v:v,t:t});
+    }
+  });
+  LS.set('edm_vals',vals);LS.set('edm_off',off);
 
-      <!-- Etapa 3: Relatório Consolidado -->
-      <div id="secaoResultadoFinal" style="display: none;">
-        <div class="cabecalho-resultado">
-          <h2 id="tituloFinal" style="margin: 0;">Relatório de Sessões</h2>
-          <div class="grupo-acoes-final">
-            <button class="btn-secundario" onclick="exportarExcel()">
-              📊 Baixar Planilha (Excel)
-            </button>
-            <button class="btn-secundario" onclick="window.print()">
-              🖨️ Imprimir / PDF
-            </button>
-          </div>
-        </div>
+  const f=n=>'R$ '+n.toFixed(2).replace('.',','),c=n=>n.toFixed(2).replace('.',',');
+  
+  let htmlRes='<h3>Relatório de Sessões (até '+($('ate').value||'').split('-').reverse().join('/')+')</h3>'+
+    '<table><thead><tr><th style="width:80px" class="text-center">Cobrado</th><th>Criança</th><th>Dias</th><th>Sessões</th><th>Valor da sessão</th><th>Total</th></tr></thead><tbody>';
 
-        <table>
-          <thead>
-            <tr>
-              <th>Criança</th>
-              <th>Dias</th>
-              <th class="col-sessao">Sessões</th>
-              <th>Valor da sessão</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody id="corpoTabelaFinal"></tbody>
-        </table>
-        <div class="total-painel" id="resumoValores"></div>
+  linhas.forEach(l=>{
+    const cobChecked=cobrados[l.k]?'checked':'';
+    htmlRes+='<tr>'+
+      '<td class="text-center"><input type="checkbox" class="cob-res" data-k="'+l.k+'" '+cobChecked+'></td>'+
+      '<td>'+esc(l.nome)+'</td><td>'+esc(l.dias)+'</td><td>'+l.n+'</td><td>'+f(l.v)+'</td><td>'+f(l.t)+'</td>'+
+    '</tr>';
+  });
 
-        <!-- Botão para abrir o WhatsApp Web sem texto pré-carregado -->
-        <div class="rodape-whatsapp">
-          <button class="btn-whatsapp" onclick="abrirWhatsAppLimpo()">
-            💬 Abrir WhatsApp Web
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+  htmlRes+='</tbody></table><div class="total-box">Valor Total do Mês: '+f(tot)+'</div><button id="btnCsv">Baixar Planilha (Excel)</button>';
+  $('resultado').innerHTML=htmlRes;
 
-  <script>
-    const CLIENT_ID = '846101014697-0nrq60gv7sgelmgtslncq3a0cds0osff.apps.googleusercontent.com';
-    const KEY_STORAGE_TOKEN = 'edm_google_token';
-    const KEY_STORAGE_VALORES = 'edm_precos_criancas';
-
-    let tokenClient;
-    let accessToken = null;
-    let agendaPardalId = null;
-    let dadosCrianças = {};
-
-    window.onload = () => {
-      const hoje = new Date();
-      const ano = hoje.getFullYear();
-      const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-      document.getElementById('inputMes').value = `${ano}-${mes}`;
-      atualizarLimiteMes();
-
-      tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: 'https://www.googleapis.com/auth/calendar.readonly',
-        callback: (resp) => {
-          if (resp.error) return alert('Erro ao autenticar com o Google.');
-          definirToken(resp.access_token);
-        }
-      });
-
-      const tokenSalvo = localStorage.getItem(KEY_STORAGE_TOKEN);
-      if (tokenSalvo) {
-        definirToken(tokenSalvo, false);
+  document.querySelectorAll('.cob-res').forEach(chk=>{
+    chk.addEventListener('change', function(){
+      const k=this.getAttribute('data-k');
+      const cobMap=LS.get('edm_cobrados_'+mes,{});
+      if(this.checked){
+        cobMap[k]=true;
+      }else{
+        delete cobMap[k];
       }
-    };
+      LS.set('edm_cobrados_'+mes,cobMap);
+    });
+  });
 
-    function atualizarLimiteMes() {
-      const mesVal = document.getElementById('inputMes').value;
-      if (!mesVal) return;
-      const [ano, mes] = mesVal.split('-').map(Number);
-      
-      const hoje = new Date();
-      if (hoje.getFullYear() === ano && (hoje.getMonth() + 1) === mes) {
-        const dia = String(hoje.getDate()).padStart(2, '0');
-        document.getElementById('inputDataAte').value = `${ano}-${String(mes).padStart(2, '0')}-${dia}`;
-      } else {
-        const ultDia = new Date(ano, mes, 0).getDate();
-        document.getElementById('inputDataAte').value = `${ano}-${String(mes).padStart(2, '0')}-${String(ultDia).padStart(2, '0')}`;
-      }
-    }
+  $('btnCsv').onclick=()=>{
+    const rows=['Cobrado;Criança;Dias;Sessões;Valor da sessão;Total'].concat(linhas.map(l=>{
+      const cob=cobrados[l.k]?'SIM':'NÃO';
+      return '"'+cob+'";"'+l.nome.replace(/"/g,'""')+'";"'+l.dias+'";'+l.n+';'+c(l.v)+';'+c(l.t);
+    })).concat(['";"TOTAL";;;;;'+c(tot)]);
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob(['\uFEFF'+rows.join('\r\n')],{type:'text/csv;charset=utf-8'}));
+    a.download='relatorio-'+mes+'.csv';a.click();
+  };
 
-    function definirToken(token, persistir = true) {
-      accessToken = token;
-      if (persistir) {
-        localStorage.setItem(KEY_STORAGE_TOKEN, token);
-      }
-      document.getElementById('btnConexao').style.display = 'none';
-      document.getElementById('badgeConectado').style.display = 'block';
-      document.getElementById('painelBusca').style.display = 'block';
-      identificarAgendaPardal();
-    }
-
-    function autenticar() {
-      tokenClient.requestAccessToken({ prompt: '' });
-    }
-
-    async function fetchGoogle(url) {
-      const resp = await fetch(url, {
-        headers: { Authorization: `Bearer ${accessToken}` }
-      });
-      if (resp.status === 401) {
-        localStorage.removeItem(KEY_STORAGE_TOKEN);
-        document.getElementById('btnConexao').style.display = 'block';
-        document.getElementById('badgeConectado').style.display = 'none';
-        tokenClient.requestAccessToken({ prompt: '' });
-        return null;
-      }
-      return await resp.json();
-    }
-
-    async function identificarAgendaPardal() {
-      const data = await fetchGoogle('https://www.googleapis.com/calendar/v3/users/me/calendarList');
-      if (!data || !data.items) return;
-
-      const encontrada = data.items.find(cal => cal.summary.toLowerCase().includes('pardal'));
-      agendaPardalId = encontrada ? encontrada.id : 'primary';
-    }
-
-    function getPrecosSalvos() {
-      try {
-        return JSON.parse(localStorage.getItem(KEY_STORAGE_VALORES)) || {};
-      } catch (e) {
-        return {};
-      }
-    }
-
-    function salvarPreco(nome, valor) {
-      const salvos = getPrecosSalvos();
-      salvos[nome.trim()] = valor;
-      localStorage.setItem(KEY_STORAGE_VALORES, JSON.stringify(salvos));
-    }
-
-    function deveIgnorarEvento(nome) {
-      const limpo = nome.trim().toLowerCase();
-      
-      if (/^[.\s\-–—_]+$/.test(limpo)) return true;
-
-      if (limpo.includes('pagar conta') || 
-          limpo.includes('pagamento') || 
-          limpo.includes('pagar') || 
-          limpo.includes('conta') ||
-          limpo.includes('boleto') ||
-          limpo.includes('aniversário') ||
-          limpo.includes('aniversario')) {
-        return true;
-      }
-
-      return false;
-    }
-
-    async function buscarAulasPardal() {
-      if (!agendaPardalId) await identificarAgendaPardal();
-
-      const mesVal = document.getElementById('inputMes').value;
-      const dataAteStr = document.getElementById('inputDataAte').value;
-      if (!dataAteStr) return alert('Selecione a data limite.');
-
-      const [ano, mes] = mesVal.split('-').map(Number);
-      const diaFim = Number(dataAteStr.split('-')[2]);
-
-      const timeMin = new Date(ano, mes - 1, 1, 0, 0, 0).toISOString();
-      const timeMax = new Date(ano, mes - 1, diaFim, 23, 59, 59).toISOString();
-
-      const btn = document.getElementById('btnBuscarAulas');
-      btn.disabled = true;
-      btn.innerText = 'Buscando na agenda...';
-
-      const calId = encodeURIComponent(agendaPardalId);
-      const url = `https://www.googleapis.com/calendar/v3/calendars/${calId}/events?timeMin=${timeMin}&timeMax=${timeMax}&singleEvents=true&orderBy=startTime`;
-      const data = await fetchGoogle(url);
-
-      btn.disabled = false;
-      btn.innerText = 'Buscar crianças da agenda';
-
-      if (!data || !data.items) return;
-
-      dadosCrianças = {};
-      data.items.forEach(ev => {
-        const nome = (ev.summary || '').trim();
-        if (!nome || deveIgnorarEvento(nome)) return;
-
-        const inicio = ev.start?.dateTime || ev.start?.date;
-        if (!inicio) return;
-
-        const dia = String(new Date(inicio).getDate()).padStart(2, '0');
-
-        if (!dadosCrianças[nome]) {
-          dadosCrianças[nome] = { sessoes: 0, dias: new Set() };
-        }
-        dadosCrianças[nome].sessoes += 1;
-        dadosCrianças[nome].dias.add(dia);
-      });
-
-      renderizarEtapa2();
-    }
-
-    function renderizarEtapa2() {
-      const tbody = document.getElementById('corpoTabelaConfig');
-      tbody.innerHTML = '';
-
-      const precos = getPrecosSalvos();
-      const nomes = Object.keys(dadosCrianças).sort((a, b) => a.localeCompare(b));
-
-      nomes.forEach((nome, i) => {
-        const item = dadosCrianças[nome];
-        const diasStr = Array.from(item.dias).sort((a, b) => Number(a) - Number(b)).join(', ');
-        const valorSalvo = precos[nome] !== undefined ? precos[nome] : '';
-
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td class="col-check">
-            <input type="checkbox" id="chk_${i}" data-nome="${nome}" checked>
-          </td>
-          <td><strong>${nome}</strong></td>
-          <td class="col-dias">${diasStr}</td>
-          <td class="col-sessao">${item.sessoes}</td>
-          <td class="col-valor">
-            <input type="number" class="input-preco" id="preco_${i}" data-nome="${nome}" value="${valorSalvo}" placeholder="0" step="5" onchange="salvarPreco('${nome}', this.value)">
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      document.getElementById('secaoEdicao').style.display = 'block';
-      document.getElementById('secaoResultadoFinal').style.display = 'none';
-    }
-
-    function gerarTabelaFinal() {
-      const tbody = document.getElementById('corpoTabelaFinal');
-      tbody.innerHTML = '';
-
-      const linhas = document.querySelectorAll('#corpoTabelaConfig tr');
-      let totalGeral = 0;
-      let totalSessoes = 0;
-
-      linhas.forEach(tr => {
-        const chk = tr.querySelector('input[type="checkbox"]');
-        if (!chk || !chk.checked) return;
-
-        const nome = chk.getAttribute('data-nome');
-        const precoInput = tr.querySelector('.input-preco');
-        const valorUnit = parseFloat(precoInput.value) || 0;
-
-        const info = dadosCrianças[nome];
-        const subtotal = info.sessoes * valorUnit;
-        totalGeral += subtotal;
-        totalSessoes += info.sessoes;
-
-        const diasStr = Array.from(info.dias).sort((a, b) => Number(a) - Number(b)).join(', ');
-
-        const trFinal = document.createElement('tr');
-        trFinal.innerHTML = `
-          <td><strong>${nome}</strong></td>
-          <td class="col-dias">${diasStr}</td>
-          <td class="col-sessao">${info.sessoes}</td>
-          <td>${valorUnit.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
-          <td><strong>${subtotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</strong></td>
-        `;
-        tbody.appendChild(trFinal);
-      });
-
-      const dataAte = document.getElementById('inputDataAte').value;
-      const [ano, mes, dia] = dataAte.split('-');
-      
-      document.getElementById('tituloFinal').innerText = `Relatório de Sessões (até ${dia}/${mes}/${ano})`;
-      document.getElementById('resumoValores').innerText = `Total: ${totalSessoes} sessões | ${totalGeral.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
-
-      document.getElementById('secaoResultadoFinal').style.display = 'block';
-      document.getElementById('secaoResultadoFinal').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function exportarExcel() {
-      const linhas = document.querySelectorAll('#corpoTabelaFinal tr');
-      if (linhas.length === 0) return alert('Gere o relatório antes de exportar.');
-
-      let csvConteudo = 'Criança;Dias no Mês;Sessões;Valor por Sessão (R$);Total (R$)\r\n';
-
-      linhas.forEach(tr => {
-        const cols = tr.querySelectorAll('td');
-        if (cols.length >= 5) {
-          const nome = `"${cols[0].innerText.trim()}"`;
-          const dias = `"${cols[1].innerText.trim()}"`;
-          const sessoes = cols[2].innerText.trim();
-          const valorSessao = `"${cols[3].innerText.trim().replace('R$', '').trim()}"`;
-          const totalLinha = `"${cols[4].innerText.trim().replace('R$', '').trim()}"`;
-
-          csvConteudo += `${nome};${dias};${sessoes};${valorSessao};${totalLinha}\r\n`;
-        }
-      });
-
-      const textoResumo = document.getElementById('resumoValores').innerText;
-      csvConteudo += `\r\n"Total Geral";;;"${textoResumo}";""\r\n`;
-
-      const blob = new Blob(['\uFEFF' + csvConteudo], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      
-      const link = document.createElement('a');
-      const dataAte = document.getElementById('inputDataAte').value || 'fechamento';
-      link.setAttribute('href', url);
-      link.setAttribute('download', `relatorio_sessoes_${dataAte}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    // Apenas abre o WhatsApp Web sem texto pré-carregado
-    function abrirWhatsAppLimpo() {
-      window.open('https://web.whatsapp.com/', '_blank');
-    }
-  </script>
+  $('resultado').scrollIntoView({behavior:'smooth'});
+}
+</script>
 </body>
 </html>
