@@ -6,25 +6,51 @@
 <title>Relatório de Aulas - Espaço EDM</title>
 <style>
 body{font-family:Arial,sans-serif;background:#f4f7f6;color:#333;margin:0;padding:20px}
-.container{max-width:1100px;margin:0 auto;background:#fff;padding:30px;border-radius:8px;box-shadow:0 4px 8px rgba(0,0,0,.1)}
+.container{max-width:1100px;margin:0 auto;background:#fff;padding:30px;border-radius:10px;box-shadow:0 6px 15px rgba(0,0,0,.1)}
 h1{color:#2c3e50;font-size:24px}h3{margin-top:25px;color:#2c3e50}
-input,button{padding:10px;border:1px solid #ccc;border-radius:4px;font-size:16px;box-sizing:border-box}
-button{background:#3498db;color:#fff;border:none;cursor:pointer;font-weight:bold;margin-top:10px;padding:10px 20px}
-button:disabled{background:#bdc3c7;cursor:not-allowed}
-#btnAuth:not(:disabled){background:#27ae60}
+input,button{padding:10px;border:1px solid #ccc;border-radius:6px;font-size:16px;box-sizing:border-box}
+
+/* Botões animados e modernos */
+button{
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color:#fff;border:none;cursor:pointer;font-weight:bold;margin-top:10px;padding:12px 20px;
+  transition: all 0.25s ease; box-shadow: 0 4px 6px rgba(52, 152, 219, 0.2);
+}
+button:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+}
+button:active{ transform: translateY(0); }
+button:disabled{background:#bdc3c7;cursor:not-allowed;transform:none;box-shadow:none}
+
+#btnAuth:not(:disabled){background: linear-gradient(135deg, #27ae60, #219653); box-shadow: 0 4px 6px rgba(39, 174, 96, 0.2);}
+#btnAuth:not(:disabled):hover{box-shadow: 0 6px 12px rgba(39, 174, 96, 0.4);}
+
 table{width:100%;border-collapse:collapse;margin-top:10px}
-th,td{border:1px solid #ddd;padding:10px;text-align:left}
+th,td{border:1px solid #ddd;padding:12px;text-align:left}
 th{background:#2c3e50;color:#fff}
 td input[type=number]{width:120px}
-.total-box{margin-top:20px;font-size:18px;font-weight:bold;text-align:right;background:#eef2f3;padding:15px;border-radius:4px}
-.auth-box{background:#e8f8f5;padding:15px;border-radius:6px;margin-bottom:20px;border:1px solid #a3e4d7;text-align:center}
-.erro-box{background:#fdecea;border:1px solid #f5c6cb;color:#611a15;padding:12px;border-radius:6px;margin-top:15px;font-size:14px}
+
+.total-box{margin-top:20px;font-size:18px;font-weight:bold;text-align:right;background:#eef2f3;padding:15px;border-radius:6px}
+.auth-box{background:#e8f8f5;padding:15px;border-radius:8px;margin-bottom:20px;border:1px solid #a3e4d7;text-align:center}
+.erro-box{background:#fdecea;border:1px solid #f5c6cb;color:#611a15;padding:12px;border-radius:8px;margin-top:15px;font-size:14px}
 .chk{display:block;margin:6px 0}
-.text-center{text-align:center}
+
+/* Botão do WhatsApp animado */
+.btn-zap{
+  background: linear-gradient(135deg, #25d366, #20ba5a);
+  color:white;padding:8px 14px;border-radius:6px;text-decoration:none;font-size:14px;font-weight:bold;display:inline-block;
+  transition: all 0.25s ease; box-shadow: 0 3px 6px rgba(37, 211, 102, 0.2);
+}
+.btn-zap:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(37, 211, 102, 0.4);
+}
+
 @media print {
   body { background: #fff; padding: 0; }
   .container { box-shadow: none; padding: 0; max-width: 100%; }
-  button, .auth-box, #blocoAg, #btnBuscar, input[type="month"], input[type="date"] { display: none !important; }
+  button, .auth-box, #blocoAg, #btnBuscar, input[type="month"], input[type="date"], .btn-zap { display: none !important; }
 }
 </style>
 </head>
@@ -125,8 +151,6 @@ $('btnBuscar').onclick=async()=>{
         (r.result.items||[]).forEach(ev=>{
           if(ev.status==='cancelled'||!ev.summary)return;
           const txt=ev.summary.trim();
-          
-          // FILTRO: Ignora eventos que contenham termos de contas, aniversários ou avisos gerais
           if(/pagar contas|conta|aniversario|aniversário|parabéns|festa/i.test(txt))return;
           if(!/[\p{L}\p{N}]/u.test(txt))return;
           
@@ -165,7 +189,6 @@ $('btnBuscar').onclick=async()=>{
 function calcular(){
   const mes=$('mes').value;
   const vals=LS.get('edm_vals',{}),off=LS.get('edm_off',{}),linhas=[];let tot=0;
-  const cobrados=LS.get('edm_cobrados_'+mes,{});
 
   dados.forEach((d,i)=>{
     const inc=document.querySelector('.inc[data-i="'+i+'"]').checked;
@@ -183,40 +206,27 @@ function calcular(){
   
   let htmlRes='<h3>Relatório de Sessões (até '+($('ate').value||'').split('-').reverse().join('/')+')</h3>'+
     '<div style="margin-bottom:15px;">'+
-      '<button id="btnCsv" style="background-color:#27ae60; margin-right:10px;">Baixar Planilha (Excel)</button>'+
-      '<button id="btnPrint" style="background-color:#8e44ad;">Imprimir / PDF</button>'+
+      '<button id="btnCsv" style="background: linear-gradient(135deg, #27ae60, #219653); margin-right:10px;">Baixar Planilha (Excel)</button>'+
+      '<button id="btnPrint" style="background: linear-gradient(135deg, #8e44ad, #732d91);">Imprimir / PDF</button>'+
     '</div>'+
-    '<table><thead><tr><th style="width:80px" class="text-center">Cobrado</th><th>Criança</th><th>Dias</th><th>Sessões</th><th>Valor da sessão</th><th>Total</th></tr></thead><tbody>';
+    '<table><thead><tr><th>Criança</th><th>Dias</th><th>Sessões</th><th>Valor da sessão</th><th>Total</th><th style="text-align:center;">WhatsApp</th></tr></thead><tbody>';
 
   linhas.forEach(l=>{
-    const cobChecked=cobrados[l.k]?'checked':'';
+    const msgZap = encodeURIComponent(`Olá! Segue o resumo das aulas de ${l.nome} referentes ao mês ${mes}:\n- Dias: ${l.dias}\n- Total de sessões: ${l.n}\n- Valor total: ${f(l.t)}`);
+    
     htmlRes+='<tr>'+
-      '<td class="text-center"><input type="checkbox" class="cob-res" data-k="'+l.k+'" '+cobChecked+'></td>'+
       '<td>'+esc(l.nome)+'</td><td>'+esc(l.dias)+'</td><td>'+l.n+'</td><td>'+f(l.v)+'</td><td>'+f(l.t)+'</td>'+
+      '<td style="text-align:center;"><a href="https://wa.me/?text='+msgZap+'" target="_blank" class="btn-zap">Enviar Zap</a></td>'+
     '</tr>';
   });
 
   htmlRes+='</tbody></table><div class="total-box">Valor Total do Mês: '+f(tot)+'</div>';
   $('resultado').innerHTML=htmlRes;
 
-  document.querySelectorAll('.cob-res').forEach(chk=>{
-    chk.addEventListener('change', function(){
-      const k=this.getAttribute('data-k');
-      const cobMap=LS.get('edm_cobrados_'+mes,{});
-      if(this.checked){
-        cobMap[k]=true;
-      }else{
-        delete cobMap[k];
-      }
-      LS.set('edm_cobrados_'+mes,cobMap);
-    });
-  });
-
   $('btnCsv').onclick=()=>{
-    const rows=['Cobrado;Criança;Dias;Sessões;Valor da sessão;Total'].concat(linhas.map(l=>{
-      const cob=cobrados[l.k]?'SIM':'NÃO';
-      return '"'+cob+'";"'+l.nome.replace(/"/g,'""')+'";"'+l.dias+'";'+l.n+';'+c(l.v)+';'+c(l.t);
-    })).concat(['";"TOTAL";;;;;'+c(tot)]);
+    const rows=['Criança;Dias;Sessões;Valor da sessão;Total'].concat(linhas.map(l=>{
+      return '"'+l.nome.replace(/"/g,'""')+'";"'+l.dias+'";'+l.n+';'+c(l.v)+';'+c(l.t);
+    })).concat(['";TOTAL;;;;'+c(tot)]);
     const a=document.createElement('a');
     a.href=URL.createObjectURL(new Blob(['\uFEFF'+rows.join('\r\n')],{type:'text/csv;charset=utf-8'}));
     a.download='relatorio-'+mes+'.csv';a.click();
