@@ -125,8 +125,9 @@ $('btnBuscar').onclick=async()=>{
         (r.result.items||[]).forEach(ev=>{
           if(ev.status==='cancelled'||!ev.summary)return;
           const txt=ev.summary.trim();
-          // Filtra termos indesejados como aniversários ou pagamentos de contas comuns que não são nomes de alunos
-          if(/pagar contas|aniversario|aniversário/i.test(txt))return;
+          
+          // FILTRO: Ignora eventos que contenham termos de contas, aniversários ou avisos gerais
+          if(/pagar contas|conta|aniversario|aniversário|parabéns|festa/i.test(txt))return;
           if(!/[\p{L}\p{N}]/u.test(txt))return;
           
           const nome=txt,k=nome.toLowerCase();
@@ -182,7 +183,7 @@ function calcular(){
   
   let htmlRes='<h3>Relatório de Sessões (até '+($('ate').value||'').split('-').reverse().join('/')+')</h3>'+
     '<div style="margin-bottom:15px;">'+
-      '<button id="btnCsv" style="background-color:#27ai60; margin-right:10px;">Baixar Planilha (Excel)</button>'+
+      '<button id="btnCsv" style="background-color:#27ae60; margin-right:10px;">Baixar Planilha (Excel)</button>'+
       '<button id="btnPrint" style="background-color:#8e44ad;">Imprimir / PDF</button>'+
     '</div>'+
     '<table><thead><tr><th style="width:80px" class="text-center">Cobrado</th><th>Criança</th><th>Dias</th><th>Sessões</th><th>Valor da sessão</th><th>Total</th></tr></thead><tbody>';
