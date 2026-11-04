@@ -31,7 +31,7 @@ th,td{border:1px solid #ddd;padding:12px;text-align:left}
 th{background:#2c3e50;color:#fff}
 td input[type=number]{width:120px}
 
-/* Datas em azul conforme o projeto original */
+/* Datas em azul (pode alterar o tom aqui se preferir) */
 .col-dias {
   color: #2980b9;
   font-weight: 500;
@@ -41,6 +41,7 @@ td input[type=number]{width:120px}
 .auth-box{background:#e8f8f5;padding:15px;border-radius:8px;margin-bottom:20px;border:1px solid #a3e4d7;text-align:center}
 .erro-box{background:#fdecea;border:1px solid #f5c6cb;color:#611a15;padding:12px;border-radius:8px;margin-top:15px;font-size:14px}
 .chk{display:block;margin:6px 0}
+.text-center{text-align:center}
 
 /* Botão do WhatsApp animado no final */
 .btn-zap-final{
@@ -195,6 +196,7 @@ $('btnBuscar').onclick=async()=>{
 function calcular(){
   const mes=$('mes').value;
   const vals=LS.get('edm_vals',{}),off=LS.get('edm_off',{}),linhas=[];let tot=0;
+  const cobrados=LS.get('edm_cobrados_'+mes,{});
 
   dados.forEach((d,i)=>{
     const inc=document.querySelector('.inc[data-i="'+i+'"]').checked;
@@ -219,10 +221,12 @@ function calcular(){
       '<button id="btnCsv" style="background: linear-gradient(135deg, #27ae60, #219653); margin-right:10px;">📥 Baixar Planilha (Excel)</button>'+
       '<button id="btnPrint" style="background: linear-gradient(135deg, #8e44ad, #732d91);">🖨️ Imprimir / PDF</button>'+
     '</div>'+
-    '<table><thead><tr><th>Criança</th><th>Dias</th><th>Sessões</th><th>Valor da sessão</th><th>Total</th></tr></thead><tbody>';
+    '<table><thead><tr><th style="width:90px" class="text-center">Cobrado</th><th>Criança</th><th>Dias</th><th>Sessões</th><th>Valor da sessão</th><th>Total</th></tr></thead><tbody>';
 
   linhas.forEach(l=>{
+    const cobChecked=cobrados[l.k]?'checked':'';
     htmlRes+='<tr>'+
+      '<td class="text-center"><input type="checkbox" class="cob-res" data-k="'+l.k+'" '+cobChecked+'></td>'+
       '<td>'+esc(l.nome)+'</td>'+
       '<td class="col-dias">'+esc(l.dias)+'</td>'+
       '<td>'+l.n+'</td>'+
@@ -239,10 +243,24 @@ function calcular(){
 
   $('resultado').innerHTML=htmlRes;
 
+  document.querySelectorAll('.cob-res').forEach(chk=>{
+    chk.addEventListener('change', function(){
+      const k=this.getAttribute('data-k');
+      const cobMap=LS.get('edm_cobrados_'+mes,{});
+      if(this.checked){
+        cobMap[k]=true;
+      }else{
+        delete cobMap[k];
+      }
+      LS.set('edm_cobrados_'+mes,cobMap);
+    });
+  });
+
   $('btnCsv').onclick=()=>{
-    const rows=['Criança;Dias;Sessões;Valor da sessão;Total'].concat(linhas.map(l=>{
-      return '"'+l.nome.replace(/"/g,'""')+'";"'+l.dias+'";'+l.n+';'+c(l.v)+';'+c(l.t);
-    })).concat(['";TOTAL;;;;'+c(tot)]);
+    const rows=['Cobrado;Criança;Dias;Sessões;Valor da sessão;Total'].concat(linhas.map(l=>{
+      const cob=cobrados[l.k]?'SIM':'NÃO';
+      return '"'+cob+'";"'+l.nome.replace(/"/g,'""')+'";"'+l.dias+'";'+l.n+';'+c(l.v)+';'+c(l.t);
+    })).concat(['";TOTAL;;;;;'+c(tot)]);
     const a=document.createElement('a');
     a.href=URL.createObjectURL(new Blob(['\uFEFF'+rows.join('\r\n')],{type:'text/csv;charset=utf-8'}));
     a.download='relatorio-'+mes+'.csv';a.click();
