@@ -26,16 +26,22 @@ button:disabled{background:#bdc3c7;cursor:not-allowed;transform:none;box-shadow:
 #btnAuth:not(:disabled){background: linear-gradient(135deg, #27ae60, #219653); box-shadow: 0 4px 6px rgba(39, 174, 96, 0.2);}
 #btnAuth:not(:disabled):hover{box-shadow: 0 8px 15px rgba(39, 174, 96, 0.4);}
 
-table{width:100%;border-collapse:collapse;margin-top:10px}
-th,td{border:1px solid #ddd;padding:12px;text-align:left}
+/* Tabela com colunas flexíveis e adaptação automática */
+table{width:100%;border-collapse:collapse;margin-top:10px;table-layout: auto;}
+th,td{border:1px solid #ddd;padding:12px;text-align:left;word-break: normal;}
 th{background:#2c3e50;color:#fff}
 td input[type=number]{width:120px}
 
-/* Larguras mínimas para as colunas Cobrado e Sessões */
+/* Larguras mínimas e estritas para colunas compactas */
 .col-mini {
   width: 1%;
   white-space: nowrap;
   text-align: center;
+}
+
+/* Colunas de valores numéricos ajustadas para não quebrar linha */
+.col-num {
+  white-space: nowrap;
 }
 
 /* Datas em azul */
@@ -218,7 +224,9 @@ function calcular(){
   });
   LS.set('edm_vals',vals);LS.set('edm_off',off);
 
-  const f=n=>'R$ '+n.toFixed(2).replace('.',','),c=n=>n.toFixed(2).replace('.',',');
+  // Função robusta de formatação monetária com pontos de milhar e vírgula decimal (ex: R$ 1.234,56)
+  const f = n => 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const c = n => n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   
   const resumoTexto = linhas.map(l => `• ${l.nome}: ${l.n} sessões (Dias: ${l.dias}) - Total: ${f(l.t)}`).join('\n');
   const msgZapFinal = encodeURIComponent(`📋 *Relatório Financeiro - Espaço EDM* (${mes})\n\n${resumoTexto}\n\n💰 *VALOR TOTAL DO MÊS: ${f(tot)}*`);
@@ -228,7 +236,7 @@ function calcular(){
       '<button id="btnCsv" style="background: linear-gradient(135deg, #27ae60, #219653); margin-right:10px;">📥 Baixar Planilha (Excel)</button>'+
       '<button id="btnPrint" style="background: linear-gradient(135deg, #8e44ad, #732d91);">🖨️ Imprimir / PDF</button>'+
     '</div>'+
-    '<table><thead><tr><th class="col-mini">Cobrado</th><th>Criança</th><th>Dias</th><th class="col-mini">Sess.</th><th>Valor da sessão</th><th>Total</th></tr></thead><tbody>';
+    '<table><thead><tr><th class="col-mini">Cobrado</th><th>Criança</th><th>Dias</th><th class="col-mini">Sess.</th><th class="col-num">Valor da sessão</th><th class="col-num">Total</th></tr></thead><tbody>';
 
   linhas.forEach(l=>{
     const cobChecked=cobrados[l.k]?'checked':'';
@@ -237,8 +245,8 @@ function calcular(){
       '<td>'+esc(l.nome)+'</td>'+
       '<td class="col-dias">'+esc(l.dias)+'</td>'+
       '<td class="col-mini text-center">'+l.n+'</td>'+
-      '<td>'+f(l.v)+'</td>'+
-      '<td>'+f(l.t)+'</td>'+
+      '<td class="col-num">'+f(l.v)+'</td>'+
+      '<td class="col-num">'+f(l.t)+'</td>'+
     '</tr>';
   });
 
