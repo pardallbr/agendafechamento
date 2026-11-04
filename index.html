@@ -31,7 +31,14 @@ th,td{border:1px solid #ddd;padding:12px;text-align:left}
 th{background:#2c3e50;color:#fff}
 td input[type=number]{width:120px}
 
-/* Datas em azul (pode alterar o tom aqui se preferir) */
+/* Larguras mínimas para as colunas Cobrado e Sessões */
+.col-mini {
+  width: 1%;
+  white-space: nowrap;
+  text-align: center;
+}
+
+/* Datas em azul */
 .col-dias {
   color: #2980b9;
   font-weight: 500;
@@ -176,14 +183,15 @@ $('btnBuscar').onclick=async()=>{
   const vals=LS.get('edm_vals',{}),off=LS.get('edm_off',{});
 
   let htmlTable='<h3>2. Desmarque o que não é criança e coloque o valor da sessão</h3>'+
-    '<table><thead><tr><th>Incluir</th><th>Nome no evento</th><th>Sessões</th><th>Valor (R$)</th></tr></thead><tbody>';
+    '<table><thead><tr><th class="col-mini">Incluir</th><th>Nome no evento</th><th class="col-mini">Sessões</th><th>Valor (R$)</th></tr></thead><tbody>';
   
   dados.forEach((d,i)=>{
     const incChecked=off[d.k]?'':'checked';
     const valStr=vals[d.k]!==undefined?vals[d.k]:'';
     htmlTable+='<tr>'+
-      '<td><input type="checkbox" class="inc" data-i="'+i+'" '+incChecked+'></td>'+
-      '<td>'+esc(d.nome)+'</td><td>'+d.n+'</td>'+
+      '<td class="col-mini text-center"><input type="checkbox" class="inc" data-i="'+i+'" '+incChecked+'></td>'+
+      '<td>'+esc(d.nome)+'</td>'+
+      '<td class="col-mini text-center">'+d.n+'</td>'+
       '<td><input type="number" step="0.01" min="0" class="val" data-i="'+i+'" value="'+valStr+'"></td>'+
     '</tr>';
   });
@@ -212,7 +220,6 @@ function calcular(){
 
   const f=n=>'R$ '+n.toFixed(2).replace('.',','),c=n=>n.toFixed(2).replace('.',',');
   
-  // Mensagem consolidada para o botão do WhatsApp no final
   const resumoTexto = linhas.map(l => `• ${l.nome}: ${l.n} sessões (Dias: ${l.dias}) - Total: ${f(l.t)}`).join('\n');
   const msgZapFinal = encodeURIComponent(`📋 *Relatório Financeiro - Espaço EDM* (${mes})\n\n${resumoTexto}\n\n💰 *VALOR TOTAL DO MÊS: ${f(tot)}*`);
 
@@ -221,15 +228,15 @@ function calcular(){
       '<button id="btnCsv" style="background: linear-gradient(135deg, #27ae60, #219653); margin-right:10px;">📥 Baixar Planilha (Excel)</button>'+
       '<button id="btnPrint" style="background: linear-gradient(135deg, #8e44ad, #732d91);">🖨️ Imprimir / PDF</button>'+
     '</div>'+
-    '<table><thead><tr><th style="width:90px" class="text-center">Cobrado</th><th>Criança</th><th>Dias</th><th>Sessões</th><th>Valor da sessão</th><th>Total</th></tr></thead><tbody>';
+    '<table><thead><tr><th class="col-mini">Cobrado</th><th>Criança</th><th>Dias</th><th class="col-mini">Sess.</th><th>Valor da sessão</th><th>Total</th></tr></thead><tbody>';
 
   linhas.forEach(l=>{
     const cobChecked=cobrados[l.k]?'checked':'';
     htmlRes+='<tr>'+
-      '<td class="text-center"><input type="checkbox" class="cob-res" data-k="'+l.k+'" '+cobChecked+'></td>'+
+      '<td class="col-mini text-center"><input type="checkbox" class="cob-res" data-k="'+l.k+'" '+cobChecked+'></td>'+
       '<td>'+esc(l.nome)+'</td>'+
       '<td class="col-dias">'+esc(l.dias)+'</td>'+
-      '<td>'+l.n+'</td>'+
+      '<td class="col-mini text-center">'+l.n+'</td>'+
       '<td>'+f(l.v)+'</td>'+
       '<td>'+f(l.t)+'</td>'+
     '</tr>';
