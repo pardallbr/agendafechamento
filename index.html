@@ -42,11 +42,13 @@ td input[type=number]{width:120px}
 /* Colunas de valores numéricos ajustadas para não quebrar linha */
 .col-num {
   white-space: nowrap;
+  color: #1b4f72; /* Azul escuro nos valores */
+  font-weight: 500;
 }
 
-/* Datas em azul */
+/* Datas em azul escuro */
 .col-dias {
-  color: #2980b9;
+  color: #1b4f72;
   font-weight: 500;
 }
 
@@ -56,7 +58,7 @@ td input[type=number]{width:120px}
 .chk{display:block;margin:6px 0}
 .text-center{text-align:center}
 
-/* Botão do WhatsApp animado no final */
+/* Botão do WhatsApp animado no final (sem texto pré-definido) */
 .btn-zap-final{
   background: linear-gradient(135deg, #25d366, #20ba5a);
   color:white;padding:12px 24px;border-radius:6px;text-decoration:none;font-size:16px;font-weight:bold;display:inline-block;
@@ -224,13 +226,9 @@ function calcular(){
   });
   LS.set('edm_vals',vals);LS.set('edm_off',off);
 
-  // Função robusta de formatação monetária com pontos de milhar e vírgula decimal (ex: R$ 1.234,56)
   const f = n => 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const c = n => n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   
-  const resumoTexto = linhas.map(l => `• ${l.nome}: ${l.n} sessões (Dias: ${l.dias}) - Total: ${f(l.t)}`).join('\n');
-  const msgZapFinal = encodeURIComponent(`📋 *Relatório Financeiro - Espaço EDM* (${mes})\n\n${resumoTexto}\n\n💰 *VALOR TOTAL DO MÊS: ${f(tot)}*`);
-
   let htmlRes='<h3>Relatório de Sessões (até '+($('ate').value||'').split('-').reverse().join('/')+')</h3>'+
     '<div style="margin-bottom:15px;">'+
       '<button id="btnCsv" style="background: linear-gradient(135deg, #27ae60, #219653); margin-right:10px;">📥 Baixar Planilha (Excel)</button>'+
@@ -253,7 +251,7 @@ function calcular(){
   htmlRes+='</tbody></table>'+
     '<div class="total-box">Valor Total do Mês: '+f(tot)+'</div>'+
     '<div style="text-align:right; margin-top:20px;">'+
-      '<a href="https://wa.me/?text='+msgZapFinal+'" target="_blank" class="btn-zap-final">💬 Enviar Relatório via WhatsApp</a>'+
+      '<a href="https://wa.me/" target="_blank" class="btn-zap-final">💬 Abrir WhatsApp</a>'+
     '</div>';
 
   $('resultado').innerHTML=htmlRes;
